@@ -1,7 +1,7 @@
 <template>
     <div class="home">
         <h1>{{ msg }}</h1>
-        <p>Welcome to your new single-page application, built with <a href="https://vuejs.org" target="_blank">Vue.js</a>.</p>
+        <p>Welcome to ModelsManagement!</p>
     </div>
 </template>
 
@@ -11,6 +11,19 @@
         props: {
             msg: String
         }
+        fetch('/api/Account/login', {
+            method: 'POST',
+            body: JSON.stringify({
+                email: username,
+                password: password
+            }),
+                headers: new Headers({
+                    'Content-Type': 'application/json'
+                })
+}).then(res => res.json().then((token) => {
+                    localStorage.setItem("token", token.jwt);
+)
+                    .catch(error => alert('Error:', error))
     };
 </script>
 

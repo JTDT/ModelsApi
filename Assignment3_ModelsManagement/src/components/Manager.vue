@@ -6,23 +6,24 @@
         <table class="table">
             <thead class="bg-dark text-white">
                 <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
+                    <th>First Name |</th>
+                    <th>Last Name |</th>
                     <th>Email</th>
                 </tr>
-            </thead>
-            <tbody>
-                <!--<tr>
-                    <td>{{ manager.firstname}}</td>
-                    <td>{{ manager.lastname }}</td>
-                    <td>{{ manager.email }}</td>
-                </tr>-->
-            </tbody>
-        </table>"
+            </thead>          
+        </table>
+       <!-- <div v-for="managers in managerList" :key="manager.id">-->
+            <!--<table>
+                <tr v-on:click="updateSelectedManager(manager)">
+                    <td>{{manager.firstname}}</td>
+                    <td>{{manager.lastname}}</td>
+                    <td>{{manager.email}}</td>
+                </tr>
+             </table>-->
         <button type="button" @click="addManager()">Add manager</button>
         <button type="button" @click="deleteManager()">Delete manager</button>
-
-    </div>
+        </div>
+    <!--</div>-->
 </template>
 
 <script>

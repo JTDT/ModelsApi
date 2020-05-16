@@ -1,6 +1,6 @@
 <template>
     <div class="home" id="login">
-        <h1>{{ msg }}</h1>
+        <h1>ModelManagement</h1>
         <p>Welcome to ModelsManagement. Please log in!</p>
         <form>
             <div class="form-group">
@@ -11,7 +11,8 @@
                 <label for="password">Password</label>
                 <input type="password" v-model="password" />
             </div>
-            <button type="button" v-on:click="login()">Login</button>
+           <!--<button type="button" v-on:click="login()">Login</button>-->
+            <button type="button" v-on:click="checkAccount">Login</button>
         </form>
     </div>
 </template>
@@ -25,7 +26,6 @@
             return {
                 //username: "",
                 // password: "",
-
             };
         },
         methods: {
@@ -45,6 +45,16 @@
                 })
                     .catch(error => alert('Error:', error))
             },
+            async checkAccount() {
+                if (this.email == manager.email && this.password == manager.password) {
+                    //Naviger til Manager siden 
+                } else if (this.email == model.email && this.password == model.password) {
+                    //Naviger til Model side
+                }
+                else {
+                    error => alert('Error:', error)
+                }
+            }
         },
     }
 

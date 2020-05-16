@@ -4,21 +4,25 @@
         <h3>Models</h3>
         <p>List of signed models at ModelsManagement.</p>
         <table class="table">
-            <thead>
                 <tr>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email</th>
                 </tr>
-            </thead>
-            <tbody>
-              
-            </tbody>
         </table>
+        <div v-for="model in modelList" :key="model.id">
+            <table>
+                <tr v-on:click="updateSelectedModel(model)">
+                    <td>{{model.firstname}}</td>
+                    <td>{{model.lastname}}</td>
+                    <td>{{model.email}}</td>
+                </tr>
+            </table>
+        </div>
 
         <button type="button" @click="addModel()">Add model</button>
         <button type="button" @click="deleteModel()">Delete model</button>
-        
+
     </div>
 </template>
 
@@ -31,8 +35,19 @@
     //let role = decodedJwtData["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
 
     //if (role == "Manager") {
-        
+
     //}
+    let response = await fetch('http://localhost:44368/api/Models', {
+        method: 'GET',
+        credentials: 'include',
+        headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem("token"),
+            'Content-Type': 'application/json'
+        }
+    });
+    if (response.ok) {
+        this.modelList = await response.json();
+    }
 
     export default {
         name: 'Home',
@@ -46,10 +61,6 @@
                 fetch('http://localhost:44368/api/Models', {
                     method: 'POST',
                     credentials: 'include',
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token"),
-                        'Content-Type': 'application/json'
-                    },
                     body: JSON.stringify( //stringfy = konverterer alle elementer i json-objektet tils stringe
                         {
                             firstName: this.firstName,
@@ -70,9 +81,13 @@
                             comment: this.comment,
                             password: this.password
                         }),
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                        'Content-Type': 'application/json'
+                    },
                 }).then(resonse => {
-                    var items = resonse;
-                    items.msg // mangler!
+                    let items = JSON.parse(resonse);
+                    //items.msg // mangler!
                 }).catch(error => alert({
                     isLoading: false,
                     message: 'Something bad happened ' + error
@@ -83,7 +98,7 @@
                 // mangler at specificere id på modellen som skal slettes!
                 fetch('http://localhost:44368/api/models/${id}'), {
                     method: 'DELETE'
-                }  
+                }
             },
         }
     }

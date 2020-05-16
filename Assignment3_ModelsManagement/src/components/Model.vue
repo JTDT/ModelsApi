@@ -5,7 +5,8 @@
         <p>List of signed models at ModelsManagement.</p>
 
         <button type="button" @click="addModel()">Add model</button>
-
+        <button type="button" @click="deleteModel()">Delete model</button>
+        
     </div>
 </template>
 
@@ -15,13 +16,18 @@
         props: {
             msg: String
         },
-        
+
         methods: {
-            // Tilføjer model, når man har trykket på "Add-model"-knappen 
+            // Tilføjer model, når man har trykket på "Add-model"-knappen
             async addModel() {
                 fetch('http://localhost:1337/api/Models', {
                     method: 'POST',
-                    body: JSON.stringify(
+                    credentials: 'include',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify( //stringfy = konverterer alle elementer i json-objektet tils stringe
                         {
                             firstName: this.firstName,
                             lastName: this.lastName,
@@ -41,25 +47,22 @@
                             comment: this.comment,
                             password: this.password
                         }),
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token"),
-                        'Content-Type': 'application/json'
-                    }
-                }).then(res => {
-                    if (!res.ok) {
-                        if (res.status == 400)
-                            throw new Error(res.statusText);
-                        else
-                            throw new Error('Failed Network response');
-                    }
-                    else {
-                        this.createstatus = "OK";
-                    }
-                });
-            }
+                }).then(resonse => {
+                    //var items = resonse;
+                }).catch(error => alert({
+                    isLoading: false,
+                    message: 'Something bad happened ' + error
+                }));
+            },
+
+            async deleteModel() {
+                // mangler at specificere id på modellen som skal slettes!
+                fetch('https://localhost:44368/api/models/${id}'), {
+                    method: 'DELETE'
+                }  
+            },
         }
     }
 </script>
-
 <style>
 </style>

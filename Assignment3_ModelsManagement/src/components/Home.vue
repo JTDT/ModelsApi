@@ -18,7 +18,7 @@
         methods: {
             async login() {
                 fetch('http://localhost:1337/api/Account/login', {
-                    method: 'POST',
+                    method: 'POST', 
                     body: JSON.stringify(
                         {
                             email: username,

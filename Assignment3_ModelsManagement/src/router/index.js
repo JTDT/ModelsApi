@@ -6,7 +6,7 @@ import VueRouter from "vue-router";
 //import Models from "../views/Models.vue";
 //import Managers from "../views/Managers.vue";
 
-//Vue.use(VueRouter);
+Vue.use(VueRouter);
 
 //const routes = [
 //    {

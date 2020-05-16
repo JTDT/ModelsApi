@@ -10,6 +10,7 @@
         name: 'Home',
         props: {
             msg: String
+            //Her laves fetch kald
         }
     };
 </script>

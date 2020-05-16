@@ -1,25 +1,36 @@
 <template>
-	<div class="home">
-		<h1>{{ msg }}</h1>
-		<p>Welcome to ModelsManagement. Please log in!</p>
+    <div class="home" id="login">
+        <h1>{{ msg }}</h1>
+        <p>Welcome to ModelsManagement. Please log in!</p>
         <form>
-            <h2>Login</h2>  
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" v-model="username">
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" v-model="password" />
+            </div>
+            <button type="button" v-on:click="login()">Login</button>
         </form>
-	</div>
+    </div>
 </template>
 
-<script>
-    let username = "Poul"
-    let password = 123
+<script>    
+    let username;
+    let password;
+  
     export default {
-        name: 'Home',
-        props: {
-            msg: String
-        },
+        data() {
+            return {
+                //username: "",
+                // password: "",
 
+            };
+        },
         methods: {
             async login() {
-                fetch('http://localhost:1337/api/Account/login', {
+                fetch('http://localhost:44368/api/Account/login', {
                     method: 'POST', 
                     body: JSON.stringify(
                         {
@@ -41,5 +52,13 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+     #login {
+        width: 500px;
+        border: 1px solid #CCCCCC;
+        background-color: #FFFFFF;
+        margin: auto;
+        margin-top: 200px;
+        padding: 20px;
+    }
 </style>
 

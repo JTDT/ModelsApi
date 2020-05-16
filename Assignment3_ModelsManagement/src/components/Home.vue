@@ -1,12 +1,14 @@
 <template>
-    <div class="home">
-        <h1>{{ msg }}</h1>
-        <p>Welcome to ModelsManagement. Please log in!</p>
-    </div>
+	<div class="home">
+		<h1>{{ msg }}</h1>
+		<p>Welcome to ModelsManagement. Please log in!</p>
+        <form>
+            <h2>Login</h2>  
+        </form>
+	</div>
 </template>
 
 <script>
-    // Dette skal ændres til gyldige logins!
     let username = "Poul"
     let password = 123
     export default {

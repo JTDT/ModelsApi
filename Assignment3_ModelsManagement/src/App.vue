@@ -1,20 +1,34 @@
 <template>
-    <div id="app">
+    <!--<div id="app">
         <Home msg="ModelsManagement" />
+    </div>-->
+    <div id="app">
+        <!--<div class="routing" v-if="this.$route.path !== '/'">-->
+        <router-view></router-view>
+        <Navigation />
+        <!--</div>-->        
     </div>
 </template>
 
 <script>
-    import Home from './components/Home.vue';
+    import Navigation from './components/Navigation';
 
     export default {
         name: 'app',
         components: {
-            Home
+            'Navigation': Navigation
         }
     };
 </script>
 
 <style>
+    #app {
+        font-family: 'Avenir', Helvetica, Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        text-align: center;
+        color: #2c3e50;
+        margin-top: 60px;
+    }
 </style>
 

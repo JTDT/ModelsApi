@@ -12,7 +12,7 @@
                 <input type="password" v-model="password" />
             </div>
            <!--<button type="button" v-on:click="login()">Login</button>-->
-            <button type="button" v-on:click="checkAccount">Login</button>
+            <button type="button" v-on:click="navigateToJobs">Login</button>
         </form>
     </div>
 </template>
@@ -45,15 +45,8 @@
                 })
                     .catch(error => alert('Error:', error))
             },
-            async checkAccount() {
-                if (this.email == manager.email && this.password == manager.password) {
-                    //Naviger til Manager siden 
-                } else if (this.email == model.email && this.password == model.password) {
-                    //Naviger til Model side
-                }
-                else {
-                    error => alert('Error:', error)
-                }
+            async navigateToJobs() {                   
+                this.$router.push('Jobs')
             }
         },
     }

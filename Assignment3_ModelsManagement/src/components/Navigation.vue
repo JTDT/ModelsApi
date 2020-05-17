@@ -27,11 +27,16 @@
                     },
                     {
                         id: 2,
+                        text: 'AddJob',
+                        page: '/AddJob'
+                    },
+                    {
+                        id: 3,
                         text: 'Model',
                         page: '/Model'
                     },
                     {
-                        id: 3,
+                        id: 4,
                         text: 'Manager',
                         page: '/Manager'
                     }

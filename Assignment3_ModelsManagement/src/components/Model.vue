@@ -20,7 +20,7 @@
             <label for="hairColor">Hair Color: </label><input type="text" id="hairColor" name="hairColor" v-model="hairColor" required/>
             <label for="eyeColor">Eye Color: </label><input type="text" id="eyeColor" name="eyeColor" v-model="eyeColor" required/>
             <label for="comment">Comments: </label><input type="text" id="comments" name="comments" v-model="comments" required/>
-            <label for="password">Password: </label><input type="text" id="password" name="password" v-model="password" required/>
+            <label for="password">Password: * </label><input type="text" id="password" name="password" v-model="password" required/>
 
             <input type="submit" value="Add model" id="button" @click="addModel()">
             <input type="reset" value="Reset fields" id="button">

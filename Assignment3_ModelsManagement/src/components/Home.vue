@@ -40,7 +40,7 @@
                     })
                 }).then(res => res.json()).then((token) => {
                     localStorage.setItem("token", token.jwt);
-                    this.$router.push('Model')
+                    this.$router.push('Jobs')
                 })
                     .catch(error => alert('Error:', error))
             },

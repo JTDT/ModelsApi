@@ -4,39 +4,27 @@
 
         <form id="createModelform">
             <p>Please fill out the form below to sign new models!</p>
-            <label for="firstName">First Name: * </label><input type="text" id="firstName" name="firstName" v-model="firstName" required />
-            <label for="lastName">Last Name: * </label><input type="text" id="lastName" name="lastName" v-model="lastName" required />
-            <label for="email">Email: * </label><input type="text" id="email" name="email" v-model="email" required />
-            <label for="phoneNo">Phone No: </label><input type="text" id="phoneNo" name="phoneNo" v-model="phoneNo" />
-            <label for="addresLine1">AddresLine1: </label><input type="text" id="addresLine1" name="addresLine1" v-model="addresLine1" />
-            <label for="addresLine2">AddresLine2: </label><input type="text" id="addresLine2" name="addresLine2" v-model="addresLine2" />
-            <label for="zip">Zip: </label><input type="text" id="zip" name="zip" v-model="zip" />
-            <label for="city">City: </label><input type="text" id="city" name="city" v-model="city" />
-            <label for="country">Country: </label><input type="text" id="country" name="country" v-model="country" />
-            <label for="birthDate">Birth date: </label><input type="text" id="birthDate" name="birthDate" v-model="birthDate" />
-            <label for="nationality">Nationality: </label><input type="text" id="nationality" name="nationality" v-model="nationality" />
-            <label for="height">Height: </label><input type="text" id="height" name="height" v-model="height" />
-            <label for="shoeSize">Shoe size: </label><input type="text" id="shoeSize" name="shoeSize" v-model="shoeSize" />
-            <label for="hairColor">Hair Color: </label><input type="text" id="hairColor" name="hairColor" v-model="hairColor" />
-            <label for="eyeColor">Eye Color: </label><input type="text" id="eyeColor" name="eyeColor" v-model="eyeColor" />
-            <label for="comment">Comments: </label><input type="text" id="comments" name="comments" v-model="comments" />
-            <label for="password">Password: </label><input type="text" id="password" name="password" v-model="password" />
+            <label for="firstName">First Name: * </label><input type="text" id="firstName" name="firstName" v-model="firstName" required/>
+            <label for="lastName">Last Name: * </label><input type="text" id="lastName" name="lastName" v-model="lastName" required/>
+            <label for="email">Email: * </label><input type="text" id="email" name="email" v-model="email" required/>
+            <label for="phoneNo">Phone No: </label><input type="text" id="phoneNo" name="phoneNo" v-model="phoneNo" required/>
+            <label for="addresLine1">AddresLine1: </label><input type="text" id="addresLine1" name="addresLine1" v-model="addresLine1" required/>
+            <label for="addresLine2">AddresLine2: </label><input type="text" id="addresLine2" name="addresLine2" v-model="addresLine2" required/>
+            <label for="zip">Zip: </label><input type="text" id="zip" name="zip" v-model="zip" required/>
+            <label for="city">City: </label><input type="text" id="city" name="city" v-model="city" required/>
+            <label for="country">Country: </label><input type="text" id="country" name="country" v-model="country" required/>
+            <label for="birthDate">Birth date: </label><input type="date" id="birthDate" name="birthDate" v-model="birthDate" required/>
+            <label for="nationality">Nationality: </label><input type="text" id="nationality" name="nationality" v-model="nationality" required/>
+            <label for="height">Height: </label><input type="number" id="height" name="height" v-model.number="height" required/>
+            <label for="shoeSize">Shoe size: </label><input type="number" id="shoeSize" name="shoeSize" v-model.number="shoeSize" required/>
+            <label for="hairColor">Hair Color: </label><input type="text" id="hairColor" name="hairColor" v-model="hairColor" required/>
+            <label for="eyeColor">Eye Color: </label><input type="text" id="eyeColor" name="eyeColor" v-model="eyeColor" required/>
+            <label for="comment">Comments: </label><input type="text" id="comments" name="comments" v-model="comments" required/>
+            <label for="password">Password: </label><input type="text" id="password" name="password" v-model="password" required/>
 
             <input type="submit" value="Add model" id="button" @click="addModel()">
             <input type="reset" value="Reset fields" id="button">
         </form>
-
-        <br /><br />
-        <input type="submit" value="Delete model" id="button" @click="deleteModel()">
-
-        <div v-for="model in modelList">
-            <table>
-                <tr>
-                    <td>{{model.firstName}}</td>
-                    <td>{{model.lastName}}</td>
-                </tr>
-            </table>
-        </div>
 
     </div>
 </template>
@@ -54,7 +42,6 @@
     }
 
     export default {
-        name: "model",
         data() {
             return {
                 firstName: "",
@@ -68,8 +55,8 @@
                 country: "",
                 birthDate: "",
                 nationality: "",
-                height: "",
-                shoeSize: "",
+                height: 0,
+                shoeSize: 0,
                 hairColor: "",
                 eyeColor: "",
                 comments: "",
@@ -119,37 +106,6 @@
             }
         },
 
-        created() {
-            alert('Created hook has been called');
-            this.getModels();
-        },
-
-        async getModels() {
-            let response = await fetch('https://localhost:44368/api/Models', {
-                method: 'GET',
-                credentials: 'include',
-                headers: {
-                    'Authorization': 'Bearer ' + localStorage.getItem("token"),
-                    'Content-Type': 'application/json'
-                }
-            })
-            if (response.ok) {
-                this.modelList = await response.json();
-                console.log("getModels response ok" + this.modelList);
-            }
-        },
-
-        async deleteModel() {
-            // mangler at specificere id på modellen som skal slettes!
-            try {
-                fetch('https://localhost:44368/api/models/${id}'), {
-                    method: 'DELETE'
-                }
-            }
-            catch {
-                throw DOMException;
-            }
-        },
     }
 
 </script>

@@ -5,49 +5,47 @@
         <form>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" v-model="username">
+                <input type="email" v-model="email">
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" v-model="password" />
             </div>
            <!--<button type="button" v-on:click="login()">Login</button>-->
-            <button type="button" v-on:click="navigateToJobs">Login</button>
+            <button type="button" v-on:click="login()">Login</button>
         </form>
     </div>
 </template>
 
 <script>    
-    let username;
-    let password;
+    //let email;
+    //let password;
   
     export default {
         data() {
             return {
-                //username: "",
-                // password: "",
+                 email: "",
+                 password: "",
             };
         },
         methods: {
             async login() {
-                fetch('http://localhost:44368/api/Account/login', {
+                fetch('https://localhost:44368/api/Account/login', {
                     method: 'POST', 
                     body: JSON.stringify(
                         {
-                            email: username,
-                            password: password
+                            email: this.email,
+                            password: this.password
                         }),
                     headers: new Headers({
                         'Content-Type': 'application/json'
                     })
                 }).then(res => res.json()).then((token) => {
                     localStorage.setItem("token", token.jwt);
+                    this.$router.push('Jobs')
                 })
                     .catch(error => alert('Error:', error))
             },
-            async navigateToJobs() {                   
-                this.$router.push('Jobs')
-            }
         },
     }
 

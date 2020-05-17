@@ -2,25 +2,17 @@
     <div id="modelsPage">
         <h1>{{ msg }}</h1>
         <h3>Models</h3>
-        <p>List of signed models at ModelsManagement.</p>
-        <table class="table">
-                <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email</th>
-                </tr>
-        </table>
-        <div v-for="model in modelList" :key="model.id">
-            <table>
-                <tr v-on:click="updateSelectedModel(model)">
-                    <td>{{model.firstname}}</td>
-                    <td>{{model.lastname}}</td>
-                    <td>{{model.email}}</td>
-                </tr>
-            </table>
-        </div>
+        <form id="createModelform">
+            <label for="name">First Name: </label>
+            <input type="text" id="firstname" name="firstname" /><br /><br />
+            <label for="name">Last Name: </label>
+            <input type="text" id="lastname" name="lastname" /><br /><br />
+            <label for="email">Email: </label>
+            <input type="text" id="email" name="email" /> <br /><br />
+            <input type="submit" value="Add model" id="submit" @click="addModel()"> <input type="reset">
+        </form>
 
-        <button type="button" @click="addModel()">Add model</button>
+        <br /><br />
         <button type="button" @click="deleteModel()">Delete model</button>
 
     </div>
@@ -37,18 +29,7 @@
     //if (role == "Manager") {
 
     //}
-    let response = await fetch('http://localhost:44368/api/Models', {
-        method: 'GET',
-        credentials: 'include',
-        headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem("token"),
-            'Content-Type': 'application/json'
-        }
-    });
-    if (response.ok) {
-        this.modelList = await response.json();
-    }
-
+   
     export default {
         name: 'Home',
         props: {
@@ -87,7 +68,7 @@
                     },
                 }).then(resonse => {
                     let items = JSON.parse(resonse);
-                    //items.msg // mangler!
+                    items.msg // mangler
                 }).catch(error => alert({
                     isLoading: false,
                     message: 'Something bad happened ' + error
@@ -96,11 +77,21 @@
 
             async deleteModel() {
                 // mangler at specificere id på modellen som skal slettes!
-                fetch('http://localhost:44368/api/models/${id}'), {
-                    method: 'DELETE'
+                try {
+                    fetch('http://localhost:44368/api/models/${id}'), {
+                        method: 'DELETE'
+                    }
+                }
+                catch {
+                    throw DOMException;
                 }
             },
         }
     }
 </script>
-<style></style>
+<style>
+form{
+    background-color: aliceblue;
+    padding: 10px;
+}
+</style>

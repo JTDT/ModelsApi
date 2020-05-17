@@ -5,7 +5,7 @@
         <form>
             <div class="form-group">
                 <label for="email">Email</label>
-                <input type="email" v-model="username">
+                <input type="email" v-model="email">
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
@@ -18,7 +18,7 @@
 </template>
 
 <script>    
-    let username;
+    let email;
     let password;
   
     export default {
@@ -34,7 +34,7 @@
                     method: 'POST', 
                     body: JSON.stringify(
                         {
-                            email: username,
+                            email: email,
                             password: password
                         }),
                     headers: new Headers({

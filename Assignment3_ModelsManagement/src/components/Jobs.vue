@@ -1,4 +1,4 @@
-<template>
+<!--<template>
     <div>
         <h2>Job list</h2>
         <div>
@@ -142,4 +142,4 @@
 
 
 <style>
-</style>
+</style>-->

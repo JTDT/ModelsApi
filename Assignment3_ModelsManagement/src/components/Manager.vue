@@ -2,24 +2,21 @@
     <div>
         <h1>{{ msg }}</h1>
         <h3>Managers</h3>
-        <p>List of managers at ModelsManagement.</p>
-        <!-- <div v-for="managers in managerList" :key="manager.id">-->
-        <!--<table>
-       <tr v-on:click="updateSelectedManager(manager)">
-           <td>{{manager.firstname}}</td>
-           <td>{{manager.lastname}}</td>
-           <td>{{manager.email}}</td>
-       </tr>
-    </table>-->
-        <input type="text" v-model="firstName" placeholder="First Name">
-        <input type="text" v-model="lastName" placeholder="Last Name">
-        <input type="email" v-model="email" placeholder="Email">
-        <div>
-            <button type="button" v-on:click="addManager">Add manager</button>
-            <button type="button" v-on:click="deleteManager">Delete manager</button>
-        </div>
+        <form id="createManagerform">
+            <label for="name">First Name: </label>
+            <input type="text" id="firstname" name="firstname" /><br /><br />
+            <label for="name">Last Name: </label>
+            <input type="text" id="lastname" name="lastname" /><br /><br />
+            <label for="email">Email: </label>
+            <input type="email" id="email" name="email" /> <br /><br />
+            <label for="password">Password: </label>
+            <input type="password" id="password" name="password" /> <br /><br />
+            <button type="button" v-on:click="addManager()">Add manager</button>
+            <input type="reset">
+        </form>
+        <br /><br />
+        <button type="button" v-on:click="deleteManager()">Delete manager</button>
     </div>
-    <!--</div>-->
 </template>
 
 <script>
@@ -28,7 +25,8 @@
             return {
                 firstName: "",
                 lastName: "",
-                email: ""
+                email: "",
+                password: ""
             };
         },
 
@@ -44,13 +42,11 @@
                     },
                     body: JSON.stringify( //stringfy = konverterer alle elementer i json-objektet til stringe
                         {
-                            //firstName: this.input.firstName,
-                            //lastName: this.input.lastName,
-                            //email: this.input.email,
-                            //password: this.input.password
-                            firstName: firstName,
-                            lastName: lastName,
-                            email: email
+                            firstName: this.firstName,
+                            lastName: this.lastName,
+                            email: this.email,
+                            password: this.password
+                            
                         }),
                 }).then(responseJson => {
                     //var items = JSON.parse(responseJson);
@@ -59,14 +55,10 @@
                     message: 'Something bad happened ' + error
                 }));
 
-                //} else {
-
-                //}
-                //});
             },
                
             async deleteManager() {
-                // mangler at specificere id på modellen som skal slettes!
+                // mangler at specificere id på manageren som skal slettes!
                 fetch('https://localhost:44368/api/Managers/${id}'), {
                     method: 'DELETE'
                 }
@@ -75,5 +67,8 @@
     }
 </script>
 <style>
-
+    form{
+    background-color: aliceblue;
+    padding: 10px;
+}
 </style>

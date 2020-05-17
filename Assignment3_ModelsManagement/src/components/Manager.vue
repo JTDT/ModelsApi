@@ -56,6 +56,8 @@
                             throw new Error('Network response failed');
                     } else {
                         this.createstatus = "OK";
+                        localStorage.setItem("manager", data.firstName, data.lastName, data.email, data.password);
+                     
                     }
                 });
             },

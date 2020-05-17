@@ -18,9 +18,7 @@
 </template>
 
 <script>    
-    //let email;
-    //let password;
-  
+ 
     export default {
         data() {
             return {

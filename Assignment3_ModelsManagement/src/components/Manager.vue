@@ -4,13 +4,13 @@
         <h3>Managers</h3>
         <form id="createManagerform">
             <label for="name">First Name: </label>
-            <input type="text" id="firstName" name="firstName" v-model="firstName"/><br /><br />
+            <input type="text" id="firstName" name="firstName" v-model="firstName" />
             <label for="name">Last Name: </label>
-            <input type="text" id="lastName" name="lastName" v-model="lastName" /><br /><br />
+            <input type="text" id="lastName" name="lastName" v-model="lastName" />
             <label for="email">Email: </label>
-            <input type="email" id="email" name="email" v-model="email"/> <br /><br />
+            <input type="email" id="email" name="email" v-model="email"/> />
             <label for="password">Password: </label>
-            <input type="password" id="password" name="password" v-model="password" /> <br /><br />
+            <input type="password" id="password" name="password" v-model="password" />
             <button type="button" v-on:click="addManager()">Add manager</button>
             <input type="reset">
         </form>
@@ -33,7 +33,7 @@
         methods: {
             async addManager() {
                 //if (this.input.firstName != "" && this.input.lastName != "" && this.input.email != "") {
-                fetch('http://localhost:44368/api/Managers', {
+                fetch('https://localhost:44368/api/Managers', {
                     method: 'POST',
                     credentials: 'include',
                     headers: {
@@ -48,13 +48,16 @@
                             password: this.password
                             
                         }),
-                }).then(responseJson => {
-                    //var items = JSON.parse(responseJson);
-                }).catch(error => alert({
-                    isLoading: false,
-                    message: 'Something bad happened ' + error
-                }));
-
+                }).then(res => {
+                    if (!res.ok) {
+                        if (res.status == 400)
+                            throw new Error(res.statusText);
+                        else
+                            throw new Error('Network response failed');
+                    } else {
+                        this.createstatus = "OK";
+                    }
+                });
             },
                
             async deleteManager() {

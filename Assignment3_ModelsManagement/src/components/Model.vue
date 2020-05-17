@@ -73,7 +73,7 @@
         methods: {
             // Tilføjer model, når man har trykket på "Add-model"-knappen
             async addModel() {
-                fetch('http://localhost:44368/api/Models', {
+                fetch('https://localhost:44368/api/Models', {
                     method: 'POST',
                     credentials: 'include',
                     headers: {
@@ -116,7 +116,7 @@
         async deleteModel() {
             // mangler at specificere id på modellen som skal slettes!
             try {
-                fetch('http://localhost:44368/api/models/${id}'), {
+                fetch('https://localhost:44368/api/models/${id}'), {
                     method: 'DELETE'
                 }
             }

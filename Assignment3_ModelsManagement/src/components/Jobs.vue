@@ -1,4 +1,4 @@
-<!--<template>
+<template>
     <div>
         <h2>Job list</h2>
         <div>
@@ -37,6 +37,7 @@
 
     export default {
         name: "job",
+        data() { return { jobList: [], isManager = false}},
 
         //// Check user
         //let jwt = localStorage.getItem("token");
@@ -72,6 +73,7 @@
 
                 if (response.ok) {
                     this.jobList = await response.json();
+                    console.log("getJobs response ok" + this.jobList);
                     //this.jobList = JSON.parse(localStorage.getJobs)
                 }
             }
@@ -142,4 +144,4 @@
 
 
 <style>
-</style>-->
+</style>

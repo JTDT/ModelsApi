@@ -58,7 +58,7 @@
                 expense: 0,
                 expenses: []
                 /*, isManager = false*/
-}
+            }
         },
 
         //// Check user
@@ -76,6 +76,7 @@
         created() {
             alert('Created hook has been called');
             this.getJobs();
+            this.getAPIExpenses();
         },
 
         methods: {
@@ -95,7 +96,7 @@
                 }
             }
             ,
-            async getExpenses(job) {
+            async getAPIExpenses() {
                 let response = await fetch('https://localhost:44368/api/Expenses', {
                     method: 'GET',
                     credentials: 'include',
@@ -104,16 +105,20 @@
                         'Content-Type': 'application/json'
                     }
                 })
-                if (response.ok) {
-                    //var expense = 0;
-                    this.expenses.forEach(exp => {
+                if (response.ok) {                    
+                    this.expenses = await response.json();
+                }
+            },
+
+            getExpenses(job) {
+                this.expense = 0;
+                this.expenses.forEach(exp => {
                         // find the amount for each job
                         if (exp["jobId"] == job["efJobId"]) {
                             this.expense += exp["amount"];
-                            console.log("get expenses" + expenses);
+                            //console.log("get expenses" + expenses);
                         }
-                    })
-                }
+                    })                
                 return this.expense;
             }
         }

@@ -2,6 +2,8 @@
     <div id="modelsPage">
         <h1>{{ msg }}</h1>
         <h3>Models</h3>
+
+        <h4>Add models</h4>
         <form id="createModelform">
             <label for="name">First Name: </label>
             <input type="text" id="firstname" name="firstname" /><br /><br />
@@ -9,7 +11,8 @@
             <input type="text" id="lastname" name="lastname" /><br /><br />
             <label for="email">Email: </label>
             <input type="text" id="email" name="email" /> <br /><br />
-            <input type="submit" value="Add model" id="submit" @click="addModel()"> <input type="reset">
+            <input type="submit" value="Add model" id="submit" @click="addModel()"> <br><br>
+            <input type="reset" value="Reset fields"><br /><br />
         </form>
 
         <br /><br />
@@ -92,6 +95,8 @@
 <style>
 form{
     background-color: aliceblue;
+    width: auto;
+    font-family: Arial, sans-serif;
     padding: 10px;
 }
 </style>

@@ -37,7 +37,7 @@
 
     export default {
         name: "job",
-        data() { return { jobList: [], isManager = false}},
+      //  data() { return { jobList: [], isManager = false}},
 
         //// Check user
         //let jwt = localStorage.getItem("token");

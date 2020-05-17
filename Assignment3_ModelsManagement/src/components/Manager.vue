@@ -5,13 +5,20 @@
         <form id="createManagerform">
             <label for="name">First Name: </label> <input type="text" id="firstName" name="firstName" v-model="firstName" />
             <label for="name">Last Name: </label> <input type="text" id="lastName" name="lastName" v-model="lastName" />
-            <label for="email">Email: </label> <input type="text" id="email" name="email" v-model="email" /> />
+            <label for="email">Email: </label> <input type="text" id="email" name="email" v-model="email" />
             <label for="password">Password: </label> <input type="password" id="password" name="password" v-model="password" />
-            <input type="submit" value="Add manager" id="submit" @click="addManager()">        
-            <input type="reset">
-        </form>
-        <br /><br />
-        <button type="button" v-on:click="deleteManager()">Delete manager</button>
+            <input type="button" value="Add manager" id="button" @click="addManager()">
+            <input type="reset" id="button">
+
+            <label for="manager">Select Manager: </label>
+            <input type="text" name="manager" id="managerList" v-model="managerList"  />
+            <datalist id="managerList" v-for="manager in managerList">
+                <option>{{manager.firstName}}</option>
+                <!--<option value="test"></option>-->
+            </datalist>
+            <br /><br />
+            <button type="button" id="button" v-on:click="deleteManager()">Delete manager</button>
+        </form>     
     </div>
 </template>
 
@@ -26,7 +33,25 @@
             };
         },
 
+        created() {
+            this.getManagers();
+        },
         methods: {
+            async getManagers() {
+                let response = await fetch('https://localhost:44368/api/Managers', {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                        'Content-Type': 'application/json'
+                    }
+                })
+
+                if (response.ok) {
+                    this.managerList = await response.json();
+                    console.log("getJobs response ok" + this.managerList);
+                }
+            },
             async addManager() {
                 //if (this.input.firstName != "" && this.input.lastName != "" && this.input.email != "") {
                 fetch('https://localhost:44368/api/Managers', {
@@ -67,11 +92,12 @@
     }
 </script>
 <style>
- form {
+  form {
         background-color: aliceblue;
-        width: 350px;
+        width: 500px;
         font-family: Arial, sans-serif;
         padding: 10px;
+        align-content: center;
     }
 
     label {
@@ -89,7 +115,11 @@
         display: block;
     }
 
-    #submit {
+    #button {
+        text-align: center;
+        background-color: cornflowerblue;
+        font-size: 10px;
+        padding: 10px 24px;
         margin-left: 110px;
     }
 </style>

@@ -19,18 +19,24 @@
             <label for="shoeSize">Shoe size: </label><input type="text" id="shoeSize" name="shoeSize" v-model="shoeSize" />
             <label for="hairColor">Hair Color: </label><input type="text" id="hairColor" name="hairColor" v-model="hairColor" />
             <label for="eyeColor">Eye Color: </label><input type="text" id="eyeColor" name="eyeColor" v-model="eyeColor" />
-            <label for="comment">Comment: </label><input type="text" id="comment" name="comment" v-model="comment" />
+            <label for="comment">Comments: </label><input type="text" id="comments" name="comments" v-model="comments" />
             <label for="password">Password: </label><input type="text" id="password" name="password" v-model="password" />
 
             <input type="submit" value="Add model" id="button" @click="addModel()">
             <input type="reset" value="Reset fields" id="button">
         </form>
 
-        <table border="0">
-        </table>
-
         <br /><br />
-        <button type="button" @click="deleteModel()">Delete model</button>
+        <input type="submit" value="Delete model" id="button" @click="deleteModel()">
+
+        <div v-for="model in modelList">
+            <table>
+                <tr>
+                    <td>{{model.firstName}}</td>
+                    <td>{{model.lastName}}</td>
+                </tr>
+            </table>
+        </div>
 
     </div>
 </template>
@@ -48,6 +54,7 @@
     }
 
     export default {
+        name: "model",
         data() {
             return {
                 firstName: "",
@@ -65,7 +72,7 @@
                 shoeSize: "",
                 hairColor: "",
                 eyeColor: "",
-                comment: "",
+                comments: "",
                 password: ""
             };
         },
@@ -96,7 +103,7 @@
                             shoeSize: this.shoeSize,
                             hairColor: this.hairColor,
                             eyeColor: this.eyeColor,
-                            comment: this.comment,
+                            comments: this.comments,
                             password: this.password
                         })
                 }).then(res => {
@@ -109,6 +116,26 @@
                         this.createstatus = "OK";
                     }
                 });
+            }
+        },
+
+        created() {
+            alert('Created hook has been called');
+            this.getModels();
+        },
+
+        async getModels() {
+            let response = await fetch('https://localhost:44368/api/Models', {
+                method: 'GET',
+                credentials: 'include',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                    'Content-Type': 'application/json'
+                }
+            })
+            if (response.ok) {
+                this.modelList = await response.json();
+                console.log("getModels response ok" + this.modelList);
             }
         },
 

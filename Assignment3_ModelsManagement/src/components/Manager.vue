@@ -4,13 +4,13 @@
         <h3>Managers</h3>
         <form id="createManagerform">
             <label for="name">First Name: </label>
-            <input type="text" id="firstname" name="firstname" /><br /><br />
+            <input type="text" id="firstName" name="firstName" v-model="firstName"/><br /><br />
             <label for="name">Last Name: </label>
-            <input type="text" id="lastname" name="lastname" /><br /><br />
+            <input type="text" id="lastName" name="lastName" v-model="lastName" /><br /><br />
             <label for="email">Email: </label>
-            <input type="email" id="email" name="email" /> <br /><br />
+            <input type="email" id="email" name="email" v-model="email"/> <br /><br />
             <label for="password">Password: </label>
-            <input type="password" id="password" name="password" /> <br /><br />
+            <input type="password" id="password" name="password" v-model="password" /> <br /><br />
             <button type="button" v-on:click="addManager()">Add manager</button>
             <input type="reset">
         </form>

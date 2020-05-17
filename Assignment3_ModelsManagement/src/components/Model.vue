@@ -1,27 +1,56 @@
 <template>
-    <div>
+    <div id="modelsPage">
         <h1>{{ msg }}</h1>
         <h3>Models</h3>
         <p>List of signed models at ModelsManagement.</p>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                </tr>
+            </thead>
+            <tbody>
+              
+            </tbody>
+        </table>
 
         <button type="button" @click="addModel()">Add model</button>
-
+        <button type="button" @click="deleteModel()">Delete model</button>
+        
     </div>
 </template>
 
 <script>
+    //let jwt = localStorage.getItem("token");
+    //let jwtData = jwt.split('.')[1]
+    //let decodedJwtJSONData = window.atob(jwtData)
+    //let decodedJwtData = JSON.parse(decodedJwtJSONData)
+
+    //let role = decodedJwtData["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+
+    //if (role == "Manager") {
+        
+    //}
+
     export default {
         name: 'Home',
         props: {
             msg: String
         },
-        
+
         methods: {
-            // Tilføjer model, når man har trykket på "Add-model"-knappen 
+            // Tilføjer model, når man har trykket på "Add-model"-knappen
             async addModel() {
-                fetch('http://localhost:1337/api/Models', {
+                fetch('http://localhost:44368/api/Models', {
                     method: 'POST',
-                    body: JSON.stringify(
+                    credentials: 'include',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify( //stringfy = konverterer alle elementer i json-objektet tils stringe
                         {
                             firstName: this.firstName,
                             lastName: this.lastName,
@@ -41,25 +70,22 @@
                             comment: this.comment,
                             password: this.password
                         }),
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token"),
-                        'Content-Type': 'application/json'
-                    }
-                }).then(res => {
-                    if (!res.ok) {
-                        if (res.status == 400)
-                            throw new Error(res.statusText);
-                        else
-                            throw new Error('Failed Network response');
-                    }
-                    else {
-                        this.createstatus = "OK";
-                    }
-                });
-            }
+                }).then(resonse => {
+                    var items = resonse;
+                    items.msg // mangler!
+                }).catch(error => alert({
+                    isLoading: false,
+                    message: 'Something bad happened ' + error
+                }));
+            },
+
+            async deleteModel() {
+                // mangler at specificere id på modellen som skal slettes!
+                fetch('http://localhost:44368/api/models/${id}'), {
+                    method: 'DELETE'
+                }  
+            },
         }
     }
 </script>
-
-<style>
-</style>
+<style></style>

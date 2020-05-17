@@ -3,15 +3,11 @@
         <h1>{{ msg }}</h1>
         <h3>Managers</h3>
         <form id="createManagerform">
-            <label for="name">First Name: </label>
-            <input type="text" id="firstName" name="firstName" v-model="firstName" />
-            <label for="name">Last Name: </label>
-            <input type="text" id="lastName" name="lastName" v-model="lastName" />
-            <label for="email">Email: </label>
-            <input type="email" id="email" name="email" v-model="email"/> />
-            <label for="password">Password: </label>
-            <input type="password" id="password" name="password" v-model="password" />
-            <button type="button" v-on:click="addManager()">Add manager</button>
+            <label for="name">First Name: </label> <input type="text" id="firstName" name="firstName" v-model="firstName" />
+            <label for="name">Last Name: </label> <input type="text" id="lastName" name="lastName" v-model="lastName" />
+            <label for="email">Email: </label> <input type="text" id="email" name="email" v-model="email" /> />
+            <label for="password">Password: </label> <input type="password" id="password" name="password" v-model="password" />
+            <input type="submit" value="Add manager" id="submit" @click="addManager()">        
             <input type="reset">
         </form>
         <br /><br />
@@ -56,8 +52,7 @@
                             throw new Error('Network response failed');
                     } else {
                         this.createstatus = "OK";
-                        localStorage.setItem("manager", data.firstName, data.lastName, data.email, data.password);
-                     
+                        //localStorage.setItem("manager", firstName, lastName, email, password);                   
                     }
                 });
             },
@@ -72,8 +67,29 @@
     }
 </script>
 <style>
-    form{
-    background-color: aliceblue;
-    padding: 10px;
-}
+ form {
+        background-color: aliceblue;
+        width: 350px;
+        font-family: Arial, sans-serif;
+        padding: 10px;
+    }
+
+    label {
+        float: left;
+        width: 100px;
+        display: block;
+        clear: left;
+        text-align: right;
+        padding-right: 10px;
+        margin-top: 10px;
+    }
+
+    input, textarea {
+        margin-top: 10px;
+        display: block;
+    }
+
+    #submit {
+        margin-left: 110px;
+    }
 </style>

@@ -5,11 +5,13 @@
             <h3>Add model to job: </h3>
             <label for="model">Select model:</label>
             <select @change="onChangeModel($event)">
+                <option value="default" selected> Select model</option>
                 <option v-for="model in modelList">{{model.efModelId}} {{model.firstName}} </option>
             </select>
 
             <label for="model">Select Job:</label>
             <select @change="onChangeJob($event)">
+                <option value="default" selected> Select job</option>
                 <option v-for="job in jobList">{{job.efJobId}} {{job.location}} </option>
             </select>
 
@@ -21,11 +23,13 @@
             <h3>Delete model from job: </h3>
             <label for="model">Select model:</label>
             <select @change="onChangeModel($event)">
+                <option value="default" selected > Select model</option>
                 <option v-for="model in modelList">{{model.efModelId}} {{model.firstName}} </option>
             </select>
 
             <label for="model">Select Job:</label>
             <select @change="onChangeJob($event)">
+                <option value="default" selected> Select job</option>
                 <option v-for="job in jobList">{{job.efJobId}} {{job.location}} </option>
             </select>
             <input type="submit" value="Delete model from job" id="button" @click="deleteModelFromJob()">
@@ -98,13 +102,13 @@
             onChangeModel(event) {
                 let selectedID = event.target.value;
                 this.modelId = parseInt(selectedID) //får fat i den valgte models ID
-                // alert(modelId);
+                //alert(modelId);
             },
 
             onChangeJob(event) {
                 let selectedJobId = event.target.value;
                 this.jobId = parseInt(selectedJobId) //får fat i den valgte models ID
-                // alert(jobId)
+                //alert(jobId)
 
             },
 
@@ -125,6 +129,7 @@
                                 throw new Error('Network response failed');
                         } else {
                             this.createstatus = "OK";
+                            alert('Model was added to job!');
                         }
                     });
             },
@@ -144,7 +149,8 @@
                         else
                             throw new Error('Network response failed');
                     } else {
-                        this.createstatus = "OK";
+                        this.createstatus = "OK";      
+                          alert('Model was removed from job!');
                     }
                 });
             },

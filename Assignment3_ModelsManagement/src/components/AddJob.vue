@@ -69,6 +69,7 @@
                         else
                             throw new Error('Network response failed');
                     } else {
+                        alert('Job was added!');
                         this.createstatus = "OK";
                     }
                 });

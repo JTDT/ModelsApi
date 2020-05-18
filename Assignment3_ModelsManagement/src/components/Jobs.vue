@@ -26,6 +26,10 @@
 
         <div v-if="isModel">
             <label for="selectedJob">Selected job: </label>
+            <label>{{selectedJob.customer}} {{selectedJob.location}}</label>
+        </div>
+
+        <div>
             <button type="button" @click="addExpenses()">Add expense</button>
             <input type="number" id="amount" name="amount" v-model.number="amount" />
         </div>

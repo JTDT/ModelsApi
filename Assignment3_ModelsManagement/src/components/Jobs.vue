@@ -12,7 +12,7 @@
                     <th v-if="isManager">Models</th>
                     <th>Expenses</th>
                 </tr>
-                <tr v-for="job in jobList" v-on:click="showSelectedJob(job.efJobId)">
+                <tr v-for="job in jobList" v-on:click="showSelectedJob(job)">
                     <td>{{job.customer}}</td>
                     <td>{{job.startDate}}</td>
                     <td>{{job.days}}</td>
@@ -26,10 +26,8 @@
 
         <div v-if="isModel">
             <label for="selectedJob">Selected job: </label>
-            <label>{{selectedJob.customer}} {{selectedJob.location}}</label>
-        </div>
-
-        <div>
+            <label>{{selectedJob.customer}} {{selectedJob.location}}</label>     
+        
             <button type="button" @click="addExpenses()">Add expense</button>
             <input type="number" id="amount" name="amount" v-model.number="amount" />
         </div>
@@ -65,8 +63,8 @@
                 amount: 0,
                 modelId: 0,
 
-                sManager: false,
-                isModel: false,
+                isManager: false,
+                isModel: false
             }
         },
 
@@ -85,7 +83,6 @@
             if (role == "Manager") {
                 this.isManager = true;
                 //alert('Created hook has been called');
-
             }
             else
                 this.isModel = true;
@@ -113,13 +110,13 @@
             }
             ,
             showSelectedJob(job) {
-                let table = "";
+                //let table = "";
                 this.selectedJob = job;
 
-                table = document.getElementById('jobList');
+                //table = document.getElementById('jobList');
                 //let rowId =
 
-                var cells = table.getElementsById('rowCust');
+                //var cells = table.getElementsById('rowCust');
 
                 //cells.style.backgroundColor = "yellow";
                 // curent tag ???

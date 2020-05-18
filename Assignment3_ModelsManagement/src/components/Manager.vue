@@ -1,6 +1,5 @@
 <template>
-    <div>
-        <h1>{{ msg }}</h1>
+    <div v-if="isManager">
         <h3>Managers</h3>
         <form id="createManagerform">
             <label for="name">First Name: </label> <input type="text" id="firstName" name="firstName" v-model="firstName" />
@@ -9,16 +8,10 @@
             <label for="password">Password: </label> <input type="password" id="password" name="password" v-model="password" />
             <input type="button" value="Add manager" id="button" @click="addManager()">
             <input type="reset" id="button">
-
-            <label for="manager">Select Manager: </label>
-            <input type="text" name="manager" id="managerList" v-model="managerList"  />
-            <datalist id="managerList" v-for="manager in managerList">
-                <option>{{manager.firstName}}</option>
-                <!--<option value="test"></option>-->
-            </datalist>
-            <br /><br />
-            <button type="button" id="button" v-on:click="deleteManager()">Delete manager</button>
-        </form>     
+        </form>
+    </div>
+    <div v-else>
+        <p>Access denied. Only managers has access to this page!</p>
     </div>
 </template>
 
@@ -26,6 +19,8 @@
     export default {
         data() {
             return {
+                isMananger: false,
+
                 firstName: "",
                 lastName: "",
                 email: "",
@@ -34,65 +29,56 @@
         },
 
         created() {
-            this.getManagers();
+            let jwt = localStorage.getItem("token");
+            let jwtData = jwt.split('.')[1]
+            let decodedJwtJSONData = window.atob(jwtData)
+            let decodedJwtData = JSON.parse(decodedJwtJSONData)
+
+            let role = decodedJwtData["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+
+            if (role == "Manager") {
+                this.isManager = true
+            }
         },
         methods: {
-            async getManagers() {
-                let response = await fetch('https://localhost:44368/api/Managers', {
-                    method: 'GET',
-                    credentials: 'include',
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token"),
-                        'Content-Type': 'application/json'
-                    }
-                })
-
-                if (response.ok) {
-                    this.managerList = await response.json();
-                    console.log("getJobs response ok" + this.managerList);
-                }
-            },
             async addManager() {
-                //if (this.input.firstName != "" && this.input.lastName != "" && this.input.email != "") {
-                fetch('https://localhost:44368/api/Managers', {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token"),
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify( //stringfy = konverterer alle elementer i json-objektet til stringe
-                        {
-                            firstName: this.firstName,
-                            lastName: this.lastName,
-                            email: this.email,
-                            password: this.password
-                            
-                        }),
-                }).then(res => {
-                    if (!res.ok) {
-                        if (res.status == 400)
-                            throw new Error(res.statusText);
-                        else
-                            throw new Error('Network response failed');
-                    } else {
-                        this.createstatus = "OK";
-                        //localStorage.setItem("manager", firstName, lastName, email, password);                   
-                    }
-                });
-            },
-               
-            async deleteManager() {
-                // mangler at specificere id på manageren som skal slettes!
-                fetch('https://localhost:44368/api/Managers/${id}'), {
-                    method: 'DELETE'
+                if (this.firstName != "" && this.lastName != "" && this.email != "" && this.password) {
+                    fetch('https://localhost:44368/api/Managers', {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify( //stringfy = konverterer alle elementer i json-objektet til stringe
+                            {
+                                firstName: this.firstName,
+                                lastName: this.lastName,
+                                email: this.email,
+                                password: this.password
+
+                            }),
+                    }).then(res => {
+                        if (!res.ok) {
+                            if (res.status == 400)
+                                throw new Error(res.statusText);
+                            else
+                                throw new Error('Network response failed');
+                        } else {
+                            this.createstatus = "OK";
+                        }
+                    });
+                } else {
+                    alert('All inputFields required!');
                 }
+
             },
+
         }
     }
 </script>
 <style>
-  form {
+    form {
         background-color: aliceblue;
         width: 500px;
         font-family: Arial, sans-serif;

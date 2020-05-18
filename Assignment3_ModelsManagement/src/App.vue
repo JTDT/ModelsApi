@@ -1,12 +1,9 @@
 <template>
-    <!--<div id="app">
-        <Home msg="ModelsManagement" />
-    </div>-->
     <div id="app">
-        <!--<div class="routing" v-if="this.$route.path !== '/'">-->
         <router-view></router-view>
-        <Navigation />
-        <!--</div>-->        
+        <div class="top-bar">
+            <Navigation />
+        </div>    
     </div>
 </template>
 

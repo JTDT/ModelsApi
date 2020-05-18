@@ -35,6 +35,9 @@
     <Content Include="src\components\AddJob.vue">
       <SubType>Code</SubType>
     </Content>
+    <Content Include="src\components\AddModelToJob.vue">
+      <SubType>Code</SubType>
+    </Content>
     <Content Include="src\components\Home.vue" />
     <Content Include="package.json" />
     <Content Include="README.md" />

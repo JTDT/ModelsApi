@@ -26,12 +26,8 @@
 
             <label for="model">Select Job:</label>
             <select @change="onChangeJob($event)">
-                <option v-for="model in modelList">{{jobId}} <!--{{model.location}}--> </option>
-                 <
+                <option v-for="job in jobList">{{job.efJobId}} {{job.location}} </option>
             </select>
-
-             <
-
             <input type="submit" value="Delete model from job" id="button" @click="deleteModelFromJob()">
         </form>
     </div>

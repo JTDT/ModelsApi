@@ -98,13 +98,13 @@
             onChangeModel(event) {
                 let selectedID = event.target.value;
                 this.modelId = parseInt(selectedID) //får fat i den valgte models ID
-                // alert(modelId);
+                //alert(modelId);
             },
 
             onChangeJob(event) {
                 let selectedJobId = event.target.value;
                 this.jobId = parseInt(selectedJobId) //får fat i den valgte models ID
-                // alert(jobId)
+                //alert(jobId)
 
             },
 
@@ -125,6 +125,7 @@
                                 throw new Error('Network response failed');
                         } else {
                             this.createstatus = "OK";
+                            alert('Model was added to job!');
                         }
                     });
             },
@@ -144,9 +145,10 @@
                         else
                             throw new Error('Network response failed');
                     } else {
-                        this.createstatus = "OK";
+                        this.createstatus = "OK";      
+                        alert('Model was removed from job!');
                     }
-                });
+                });s
             },
         }
     }

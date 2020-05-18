@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div id="wrapper">
         <h2>Job list</h2>
         <div>
             <table>
@@ -232,6 +232,15 @@
 </script>
 
 <style>
+    #wrapper {
+        margin-left: auto;
+        margin-right: auto;
+        width: 90%;
+        background-color: aliceblue;
+        min-width: 700px;
+        box-shadow: 5px 5px 5px #828282;
+        align-content: center;
+    }
     table, th, td {
         border: 1px solid black;
         border-collapse: collapse;

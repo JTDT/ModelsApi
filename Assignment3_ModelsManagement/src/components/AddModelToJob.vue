@@ -1,5 +1,5 @@
 <template>
-    <div v-if="isManager">
+    <div id=wrapper v-if="isManager">
         <h1>Add and remove models from jobs</h1>
         <form class="ModelJobForm">
             <h3>Add model to job: </h3>
@@ -152,7 +152,15 @@
     }
 </script>
 <style>
-
+    #wrapper {
+        margin-left: auto;
+        margin-right: auto;
+        width: 90%;
+        background-color: aliceblue;
+        min-width: 700px;
+        box-shadow: 5px 5px 5px #828282;
+        align-content: center;
+    }
     label {
         float: left;
         width: 100px;

@@ -1,9 +1,9 @@
 <template>
-    <div v-if="isManager">
+    <div id=wrapper v-if="isManager">
         <h1>Jobs</h1>
-        <!--  -->
+        <p>Add new jobs here!</p>
+
         <form id="createaddJobform">
-            <p>Add new jobs here!</p>
             <label for="customer">Customer: * </label><input type="text" id="customer" name="customer" v-model="customer" required />
             <label for="startDate">Start Date:* </label><input type="date" id="startDate" name="startDate" v-model="startDate" required />
             <label for="days">Days: *</label><input type="number" id="days" name="days" v-model.number="days" required />
@@ -59,7 +59,7 @@
                             customer: this.customer,
                             startDate: this.startDate,
                             days: this.days,
-                            location: this.localStorage,
+                            location: this.location,
                             comments: this.comments
                         })
                 }).then(res => {
@@ -78,6 +78,15 @@
     }
 </script>
 <style>
+    #wrapper {
+        margin-left: auto;
+        margin-right: auto;
+        width: 90%;
+        background-color: aliceblue;
+        min-width: 700px;
+        box-shadow: 5px 5px 5px #828282;
+        align-content: center;
+    } 
     form {
         background-color: aliceblue;
         width: 500px;

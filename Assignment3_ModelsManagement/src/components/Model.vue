@@ -110,6 +110,7 @@
                             throw new Error('Network response failed');
                     } else {
                         this.createstatus = "OK";
+                        alert('Model was added!');
                     }
                 });
             }

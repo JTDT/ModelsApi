@@ -1,13 +1,15 @@
 <template>
-    <div v-if="isManager">
-        <h3>Managers</h3>
+    <div id=wrapper v-if="isManager">
+        <h1>Managers</h1>
+        <p>Please fill out the form below to add new managers!</p>
+
         <form id="createManagerform">
             <label for="name">First Name: </label> <input type="text" id="firstName" name="firstName" v-model="firstName" />
             <label for="name">Last Name: </label> <input type="text" id="lastName" name="lastName" v-model="lastName" />
             <label for="email">Email: </label> <input type="text" id="email" name="email" v-model="email" />
             <label for="password">Password: </label> <input type="password" id="password" name="password" v-model="password" />
             <input type="button" value="Add manager" id="button" @click="addManager()">
-            <input type="reset" id="button">
+            <input type="reset" id="button" value="Reset fields">
         </form>
     </div>
     <div v-else>
@@ -66,6 +68,7 @@
                                 throw new Error('Network response failed');
                         } else {
                             this.createstatus = "OK";
+                            alert('Manager was added!');
                         }
                     });
                 } else {

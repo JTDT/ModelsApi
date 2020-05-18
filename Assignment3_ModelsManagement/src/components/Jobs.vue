@@ -101,13 +101,13 @@
             }
             ,
             showSelectedJob(job) {
-                //let table = "";
+                let table = "";
                 this.selectedJob = job;
 
-                //table = document.getElementById('jobList');
+                table = document.getElementById('jobList');
                 //let rowId =
 
-                //var cells = table.getElementsById('rowCust');
+                var cells = table.getElementsById('rowCust');
 
                 //cells.style.backgroundColor = "yellow";
                 // curent tag ???

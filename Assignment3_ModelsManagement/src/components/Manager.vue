@@ -1,6 +1,5 @@
 <template>
-    <div>
-        <h1>{{ msg }}</h1>
+    <div v-if="isManager">
         <h3>Managers</h3>
         <form id="createManagerform">
             <label for="name">First Name: </label> <input type="text" id="firstName" name="firstName" v-model="firstName" />
@@ -9,7 +8,10 @@
             <label for="password">Password: </label> <input type="password" id="password" name="password" v-model="password" />
             <input type="button" value="Add manager" id="button" @click="addManager()">
             <input type="reset" id="button">
-        </form>     
+        </form>
+    </div>
+    <div v-else>
+        <p>Access denied. Only managers has access to this page!</p>
     </div>
 </template>
 
@@ -17,6 +19,8 @@
     export default {
         data() {
             return {
+                isMananger: false,
+
                 firstName: "",
                 lastName: "",
                 email: "",
@@ -25,7 +29,16 @@
         },
 
         created() {
-            this.getManagers();
+            let jwt = localStorage.getItem("token");
+            let jwtData = jwt.split('.')[1]
+            let decodedJwtJSONData = window.atob(jwtData)
+            let decodedJwtData = JSON.parse(decodedJwtJSONData)
+
+            let role = decodedJwtData["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+
+            if (role == "Manager") {
+                this.isManager = true
+            }
         },
         methods: {
             async addManager() {
@@ -53,20 +66,19 @@
                                 throw new Error('Network response failed');
                         } else {
                             this.createstatus = "OK";
-                            //localStorage.setItem("manager", firstName, lastName, email, password);                   
                         }
                     });
                 } else {
-                     alert('All inputFields required!');
+                    alert('All inputFields required!');
                 }
-                    
+
             },
-            
+
         }
     }
 </script>
 <style>
-  form {
+    form {
         background-color: aliceblue;
         width: 500px;
         font-family: Arial, sans-serif;

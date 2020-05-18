@@ -1,25 +1,30 @@
 <template>
-    <div id="JobsPage">
+    <div v-if="isManager">
         <h1>Jobs</h1>
         <!--  -->
         <form id="createaddJobform">
             <p>Add new jobs here!</p>
             <label for="customer">Customer: * </label><input type="text" id="customer" name="customer" v-model="customer" required />
-            <label for="startDate">Start Date:* </label><input type="date" id="startDate" name="startDate" v-model="startDate" required/>
+            <label for="startDate">Start Date:* </label><input type="date" id="startDate" name="startDate" v-model="startDate" required />
             <label for="days">Days: *</label><input type="number" id="days" name="days" v-model.number="days" required />
-            <label for="location">Location: </label><input type="text" id="location" name="location" v-model="location"  />
-            <label for="comments">Comments: </label><input type="text" id="comments" name="comments" v-model="comments"  />
-           
+            <label for="location">Location: </label><input type="text" id="location" name="location" v-model="location" />
+            <label for="comments">Comments: </label><input type="text" id="comments" name="comments" v-model="comments" />
+
             <input type="submit" value="Add job" id="button" @click="addJob()">
             <input type="reset" value="Reset fields" id="button">
         </form>
-        </div>
+    </div>
+    <div v-else>
+        <p>Access denied. Only managers has access to this page!</p>
+    </div>
 </template>
 
 <script>
     export default {
         data() {
             return {
+                isManager: false,
+
                 customer: "",
                 startDate: "",
                 days: 0,
@@ -27,6 +32,18 @@
                 comments: ""
 
             };
+        },
+        created() {
+            let jwt = localStorage.getItem("token");
+            let jwtData = jwt.split('.')[1]
+            let decodedJwtJSONData = window.atob(jwtData)
+            let decodedJwtData = JSON.parse(decodedJwtJSONData)
+
+            let role = decodedJwtData["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+
+            if (role == "Manager") {
+                this.isManager = true
+            }
         },
         methods: {
             async addJob() {

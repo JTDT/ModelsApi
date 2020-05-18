@@ -45,6 +45,12 @@
         </div>
 
     </div>
+    <!--<label for="model">Select : </label>
+    <input type="text" name="model" id="modelList" v-model="modelList" />
+    <datalist id="modelList" v-for="model in modelList">
+        <option>{{model.firstName}}</option>
+        <option value="test"></option>
+    </datalist>-->
 
 </template>
 

@@ -32,11 +32,16 @@
                     },
                     {
                         id: 3,
+                        text: 'AddModelToJob',
+                        page: '/AddModelToJob'
+                    },
+                    {
+                        id: 4,
                         text: 'Model',
                         page: '/Model'
                     },
                     {
-                        id: 4,
+                        id: 5,
                         text: 'Manager',
                         page: '/Manager'
                     }

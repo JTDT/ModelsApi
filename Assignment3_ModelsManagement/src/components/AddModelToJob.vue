@@ -1,56 +1,77 @@
 <template>
+    <div>
+        <h1>Jobs</h1>
+        <form id="createaddModelToJobform">
+            <p>Add model to job here!</p>
 
-    <input type="button" value="Add model to job" id="button" @click="addModelToJob()">
+            <label for="model">Select model:</label>
+            <select>
+                <option value="firstName" v-for="model in modelList">{{model.firstName}}</option>
+            </select>
 
-
-    <!--<label for="model">Select : </label>
-    <input type="text" name="model" id="modelList" v-model="modelList" />
-    <datalist id="modelList" v-for="model in modelList">
-        <option>{{model.firstName}}</option>
-        <option value="test"></option>
-    </datalist>-->
+            <input type="submit" value="Add model to job" id="button" @click="addModelToJob()">
+        </form>
+    </div>
 </template>
 
 <script>
     export default {
         data() {
             return {
-                firstName: "",
-                lastName: "",
-                email: "",
-                password: ""
+                modelList: [],
+                firstName: ""
+
             };
+        },
+        created() {
+            alert('Created hook has been called');
+            this.getModels();
         },
 
         methods: {
-            async addModelToJob() {
-        //            fetch('https://localhost:44368/api/Managers', {
-        //                method: 'POST',
-        //                credentials: 'include',
-        //                headers: {
-        //                    'Authorization': 'Bearer ' + localStorage.getItem("token"),
-        //                    'Content-Type': 'application/json'
-        //                },
-        //                body: JSON.stringify( //stringfy = konverterer alle elementer i json-objektet til stringe
-        //                    {
-        //                        firstName: this.firstName,
-        //                        lastName: this.lastName,
-        //                        email: this.email,
-        //                        password: this.password
+            async getModels() {
+                let response = await fetch('https://localhost:44368/api/Models', {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                        'Content-Type': 'application/json'
+                    }
+                })
 
-        //                    }),
-        //            }).then(res => {
-        //                if (!res.ok) {
-        //                    if (res.status == 400)
-        //                        throw new Error(res.statusText);
-        //                    else
-        //                        throw new Error('Network response failed');
-        //                } else {
-        //                    this.createstatus = "OK";
-        //                    //localStorage.setItem("manager", firstName, lastName, email, password);
-        //                }
-        //            });
-        //},
+                if (response.ok) {
+                    this.modelList = await response.json();
+                    //console.log("getJobs response ok" + this.jobList);                    
+                }
+            },
+            //async addModelToJob() {
+            //        //fetch('https://localhost:44368/api/Managers', {
+                    //    method: 'POST',
+                    //    credentials: 'include',
+                    //    headers: {
+                    //        'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                    //        'Content-Type': 'application/json'
+                    //    },
+                    //    body: JSON.stringify( //stringfy = konverterer alle elementer i json-objektet til stringe
+                    //        {
+                    //            firstName: this.firstName,
+                    //            lastName: this.lastName,
+                    //            email: this.email,
+                    //            password: this.password
+
+                    //        }),
+                    //}).then(res => {
+                    //    if (!res.ok) {
+                    //        if (res.status == 400)
+                    //            throw new Error(res.statusText);
+                    //        else
+                    //            throw new Error('Network response failed');
+                    //    } else {
+                    //        this.createstatus = "OK";
+                    //        //localStorage.setItem("manager", firstName, lastName, email, password);
+                    //    }
+                    //});
+        },
     }
 </script>
 <style>
@@ -60,6 +81,19 @@
         font-family: Arial, sans-serif;
         padding: 10px;
         align-content: center;
+    }
+    .dropdown {
+        cursor: pointer;
+            line-height: 50px;
+            padding-left: 10px;
+            padding-right: 50px;
+            position: relative;
+            text-overflow: ellipsis;
+    }
+    .dropdown_content{
+         height: auto;
+         opacity: 1;
+         visibility: visible;
     }
 
     label {
@@ -76,6 +110,7 @@
         margin-top: 10px;
         display: block;
     }
+    
 
     #button {
         text-align: center;

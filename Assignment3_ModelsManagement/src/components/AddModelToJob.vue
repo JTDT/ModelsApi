@@ -24,10 +24,10 @@
                 <option v-for="model in modelList">{{model.efModelId}} {{model.firstName}} </option>
             </select>
 
-            <!--<label for="model">Select Job:</label>
-    <select @change="onChangeJob($event)">
-        <option v-for="model in modelList">{{model.jobModels.efJobId}} {{model.jobModels.location}} </option>
-    </select>-->
+            <label for="model">Select Job:</label>
+            <select @change="onChangeJob($event)">
+                <option v-for="model in modelList">{{jobId}} <!--{{model.location}}--> </option>
+            </select>
 
             <input type="submit" value="Delete model from job" id="button" @click="deleteModelFromJob()">
         </form>
@@ -82,18 +82,18 @@
             onChangeModel(event) {
                 let selectedID = event.target.value;
                 this.modelId = parseInt(selectedID) //får fat i den valgte models ID
-               // alert(modelId);
+                // alert(modelId);
             },
-            
+
             onChangeJob(event) {
                 let selectedJobId = event.target.value;
                 this.jobId = parseInt(selectedJobId) //får fat i den valgte models ID
-               // alert(jobId)
-             
+                // alert(jobId)
+
             },
 
             async addModelToJob() {
-                fetch('https://localhost:44368/api/Jobs/'+ this.jobId + '/model/' + this.modelId,
+                fetch('https://localhost:44368/api/Jobs/' + this.jobId + '/model/' + this.modelId,
                     {
                         method: 'POST',
                         credentials: 'include',
@@ -113,14 +113,14 @@
                     });
             },
             async deleteModelFromJob() {
-                fetch('https://localhost:44368/api/Jobs/'+ this.jobId + '/model/' + this.modelId, {
+                fetch('https://localhost:44368/api/Jobs/' + this.jobId + '/model/' + this.modelId, {
                     method: 'DELETE',
                     credentials: 'include',
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem("token"),
                         'Content-Type': 'application/json'
                     },
-                  
+
                 }).then(res => {
                     if (!res.ok) {
                         if (res.status == 400)
@@ -137,7 +137,7 @@
 </script>
 <style>
 
-     label {
+    label {
         float: left;
         width: 100px;
         display: block;
@@ -146,15 +146,16 @@
         padding-right: 10px;
         margin-top: 10px;
     }
-     modelJobForm{
-         float: left;
+
+    modelJobForm {
+        float: left;
         width: 100px;
         display: block;
         clear: left;
         text-align: right;
         padding-right: 10px;
         margin-top: 10px;
-     }
+    }
 
     input, textarea {
         margin-top: 10px;

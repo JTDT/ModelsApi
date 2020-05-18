@@ -44,6 +44,8 @@
     export default {
         data() {
             return {
+                isMananger: Boolean, //default værdi 
+
                 firstName: "",
                 lastName: "",
                 email: "",

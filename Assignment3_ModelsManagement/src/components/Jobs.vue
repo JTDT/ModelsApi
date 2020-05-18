@@ -2,7 +2,7 @@
     <div>
         <h2>Job list</h2>
         <div>
-            <table>
+            <table id="jobList">
                 <tr >
                     <th>Customer</th>
                     <th>Start date</th>
@@ -12,8 +12,8 @@
                     <th>Models</th>
                     <th>Expenses</th>
                 </tr>               
-                <tr v-for="job in jobList" v-on:click="showSelectedJob(job.efJobId)">
-                    <td>{{job.customer}}</td>
+                <tr v-for="job in jobList" v-on:click="showSelectedJob(job)">
+                    <td id="rowCust">{{job.customer}}</td>
                     <td>{{job.startDate}}</td>
                     <td>{{job.days}}</td>
                     <td>{{job.location}}</td>
@@ -28,10 +28,10 @@
             <label for="selectedJob">Selected job: </label>
         </div>
 
-        <!--<div>
+        <div>
             <button type="button" @click="addExpenses()">Add expense</button>
-            <input type="number" id="expense" name="expense" v-model.number="amount" />
-        </div>-->
+            <input type="number" id="amount" name="amount" v-model.number="amount" />
+        </div>
 
         <!--<div>
             <button type="button" @click="addModelToJob()">Add Model</button>
@@ -60,29 +60,34 @@
                 expenses: [],
                 //jobmodelsAPI: [],
                 models: [],
-                selectedJobId: 0
+                selectedJob: {}, // object 
+                amount: 0,
+                modelId: 0
 
                 /*, isManager = false*/
             }
         },
 
-        //// Check user
-        //let jwt = localStorage.getItem("token");
-        //let jwtData = jwt.split('.')[1]
-        //let decodedJwtJasonData = window.atob(jwtData)
-        //let decodedJwtData = JSON.parse(decodedJwtJasonData)
-
-        //let role = decodedJwtData["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
-
-        //if (role == "Manager") {
-        //    this.isManager = true;
-        //}
+        
 
         async created() {
             //alert('Created hook has been called');
             await this.getJobs();
             this.getAPIModels();
             await this.getAPIExpenses();
+
+            // Check user
+        let jwt = localStorage.getItem("token");
+        let jwtData = jwt.split('.')[1]
+        let decodedJwtJasonData = window.atob(jwtData)
+        let decodedJwtData = JSON.parse(decodedJwtJasonData)
+
+            let role = decodedJwtData["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+            this.modelId = decodedJwtData["modelId"];
+        
+        if (role == "Manager") {
+            this.isManager = true;
+        }
                          
         },
 
@@ -103,21 +108,21 @@
                 }
             }
             ,
-            showSelectedJob(jobId) {
+            showSelectedJob(job) {
                 let table = "";
-                this.selectedJobId = jobId;
+                this.selectedJob = job;
 
-                //table = document.getElementById('table');
+                table = document.getElementById('jobList');
                 //let rowId = 
 
-                //var cells = table.getElementsByTagName('td');
+                var cells = table.getElementsById('rowCust');
 
                 //cells.style.backgroundColor = "yellow";
                 // curent tag ???
                 // class 
             }
             ,
-            async addExpenses(expense) {
+            async addExpenses() {
                 // Tilføjer expense for a model          
                 fetch('https://localhost:44368/api/Expenses', {
                     method: 'POST',
@@ -126,9 +131,13 @@
                         'Authorization': 'Bearer ' + localStorage.getItem("token"),
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify( //stringfy = konverterer alle elementer i json-objektet tils stringe
+                    body: JSON.stringify( //stringfy = konverterer alle elementer i json-objektet til stringe
                         {
-                            amount: this.firstName,
+                            modelId: this.modelId,
+                            jobId: this.selectedJob["efJobId"],
+                            date: this.selectedJob["date"],
+                            text: "",
+                            amount: this.amount
                            
                         })
                 }).then(res => {

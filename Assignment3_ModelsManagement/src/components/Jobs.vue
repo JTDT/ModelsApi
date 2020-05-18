@@ -142,8 +142,7 @@
                     }
                 });
             }
-
-            }
+            
             ,
             async getAPIExpenses() {
                 let response = await fetch('https://localhost:44368/api/Expenses', {

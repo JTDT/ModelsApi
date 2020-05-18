@@ -1,16 +1,16 @@
 <template>
-    <div id="wrapper">
+    <div>
         <h2>Job list</h2>
         <div>
             <table id="jobList">
-                <tr >
+                <tr>
                     <th>Customer</th>
                     <th>Start date</th>
                     <th>Days</th>
                     <th>Location</th>
                     <th>Comments</th>
                     <th v-if="isManager">Models</th>
-                    <th v-else>Expenses</th>
+                    <th>Expenses</th>
                 </tr>
                 <tr v-for="job in jobList" v-on:click="showSelectedJob(job.efJobId)">
                     <td>{{job.customer}}</td>
@@ -18,17 +18,14 @@
                     <td>{{job.days}}</td>
                     <td>{{job.location}}</td>
                     <td>{{job.comments}}</td>
-                    <td>{{models[job.efJobId]}}</td>
+                    <td v-if="isManager">{{models[job.efJobId]}}</td>
                     <td>{{getExpenses(job)}}</td>
                 </tr>
-            </table>            
+            </table>
         </div>
 
-        <div>
+        <div v-if="isModel">
             <label for="selectedJob">Selected job: </label>
-        </div>
-
-        <div>
             <button type="button" @click="addExpenses()">Add expense</button>
             <input type="number" id="amount" name="amount" v-model.number="amount" />
         </div>
@@ -50,7 +47,7 @@
 </template>
 
 <script>
-    
+
     export default {
         name: "job",
         data() {
@@ -60,35 +57,38 @@
                 expenses: [],
                 //jobmodelsAPI: [],
                 models: [],
-                selectedJob: {}, // object 
+                selectedJob: {}, // object
                 amount: 0,
-                modelId: 0
+                modelId: 0,
 
-                /*, isManager = false*/
+                sManager: false,
+                isModel: false,
             }
         },
 
-        
-
         async created() {
-            //alert('Created hook has been called');
-            await this.getJobs();
-            this.getAPIModels();
-            await this.getAPIExpenses();
+
 
             // Check user
-        let jwt = localStorage.getItem("token");
-        let jwtData = jwt.split('.')[1]
-        let decodedJwtJasonData = window.atob(jwtData)
-        let decodedJwtData = JSON.parse(decodedJwtJasonData)
+            let jwt = localStorage.getItem("token");
+            let jwtData = jwt.split('.')[1]
+            let decodedJwtJasonData = window.atob(jwtData)
+            let decodedJwtData = JSON.parse(decodedJwtJasonData)
 
             let role = decodedJwtData["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
             this.modelId = decodedJwtData["modelId"];
-        
-        if (role == "Manager") {
-            this.isManager = true;
-        }
-                         
+
+            if (role == "Manager") {
+                this.isManager = true;
+                //alert('Created hook has been called');
+
+            }
+            else
+                this.isModel = true;
+
+            await this.getJobs();
+            this.getAPIModels();
+            await this.getAPIExpenses();
         },
 
         methods: {
@@ -104,7 +104,7 @@
 
                 if (response.ok) {
                     this.jobList = await response.json();
-                    //console.log("getJobs response ok" + this.jobList);                    
+                    //console.log("getJobs response ok" + this.jobList);
                 }
             }
             ,
@@ -113,17 +113,17 @@
                 this.selectedJob = job;
 
                 table = document.getElementById('jobList');
-                //let rowId = 
+                //let rowId =
 
                 var cells = table.getElementsById('rowCust');
 
                 //cells.style.backgroundColor = "yellow";
                 // curent tag ???
-                // class 
+                // class
             }
             ,
             async addExpenses() {
-                // Tilføjer expense for a model          
+                // Tilføjer expense for a model
                 fetch('https://localhost:44368/api/Expenses', {
                     method: 'POST',
                     credentials: 'include',
@@ -138,7 +138,7 @@
                             date: this.selectedJob["date"],
                             text: "",
                             amount: this.amount
-                           
+
                         })
                 }).then(res => {
                     if (!res.ok) {
@@ -151,7 +151,7 @@
                     }
                 });
             }
-            
+
             ,
             async getAPIExpenses() {
                 let response = await fetch('https://localhost:44368/api/Expenses', {
@@ -162,7 +162,7 @@
                         'Content-Type': 'application/json'
                     }
                 })
-                if (response.ok) {                    
+                if (response.ok) {
                     this.expenses = await response.json();
                 }
             },
@@ -170,12 +170,12 @@
             getExpenses(job) {
                 let expense = 0;
                 this.expenses.forEach(exp => {
-                        // find the amount for each job
-                        if (exp["jobId"] == job["efJobId"]) {
-                            expense += exp["amount"];
-                            //console.log("get expenses" + expenses);
-                        }
-                    })                
+                    // find the amount for each job
+                    if (exp["jobId"] == job["efJobId"]) {
+                        expense += exp["amount"];
+                        //console.log("get expenses" + expenses);
+                    }
+                })
                 return expense;
             }
             ,
@@ -221,7 +221,7 @@
                                     models += model["firstName"] + " " + model["lastName"] + ", ";
 
                                     //if (model["location"] == job["location"] && model["customer"] == job["customer"]) {
-                                    //    job["models"].forEach(m => this.models += m["firstName"] + " " );                            
+                                    //    job["models"].forEach(m => this.models += m["firstName"] + " " );
                                     //        console.log(models);
                                     //    }
                                 })
@@ -238,39 +238,32 @@
             //    return this.models[job.efJobId];
             //}
         }
-    
+
     };
 
 </script>
 
 <style>
-    #wrapper {
-        margin-left: auto;
-        margin-right: auto;
-        width: 90%;
-        background-color: aliceblue;
-        min-width: 700px;
-        box-shadow: 5px 5px 5px #828282;
-        align-content: center;
-    }
     table, th, td {
         border: 1px solid black;
         border-collapse: collapse;
-        align-content: center;       
+        align-content: center;
+    }
 
-    }
-    table caption{
-        font-weight: bold;
-        font-size: larger;
-    }
-    th, td{
+        table caption {
+            font-weight: bold;
+            font-size: larger;
+        }
+
+    th, td {
         padding: 5px;
-        
     }
-    th{
+
+    th {
         text-align: left;
     }
-    selected{
+
+    selected {
         background-color: dodgerblue;
     }
 </style>

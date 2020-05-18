@@ -16,7 +16,7 @@
 
             <div v-for="job in jobList">
                 <table>
-                    <tr>                        
+                    <tr>
                         <td>{{job.customer}}</td>
                         <td>{{job.startDate}}</td>
                         <td>{{job.days}}</td>
@@ -29,6 +29,12 @@
             <button type="button" @click="addExpenses()">Add expense</button>
         </div>
     </div>
+    <!--<label for="model">Select : </label>
+    <input type="text" name="model" id="modelList" v-model="modelList" />
+    <datalist id="modelList" v-for="model in modelList">
+        <option>{{model.firstName}}</option>
+        <option value="test"></option>
+    </datalist>-->
 
 </template>
 

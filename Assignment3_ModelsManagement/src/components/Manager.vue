@@ -9,15 +9,6 @@
             <label for="password">Password: </label> <input type="password" id="password" name="password" v-model="password" />
             <input type="button" value="Add manager" id="button" @click="addManager()">
             <input type="reset" id="button">
-
-            <label for="manager">Select Manager: </label>
-            <input type="text" name="manager" id="managerList" v-model="managerList"  />
-            <datalist id="managerList" v-for="manager in managerList">
-                <option>{{manager.firstName}}</option>
-                <!--<option value="test"></option>-->
-            </datalist>
-            <br /><br />
-            <button type="button" id="button" v-on:click="deleteManager()">Delete manager</button>
         </form>     
     </div>
 </template>
@@ -37,57 +28,40 @@
             this.getManagers();
         },
         methods: {
-            async getManagers() {
-                let response = await fetch('https://localhost:44368/api/Managers', {
-                    method: 'GET',
-                    credentials: 'include',
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token"),
-                        'Content-Type': 'application/json'
-                    }
-                })
-
-                if (response.ok) {
-                    this.managerList = await response.json();
-                    console.log("getJobs response ok" + this.managerList);
-                }
-            },
             async addManager() {
-                //if (this.input.firstName != "" && this.input.lastName != "" && this.input.email != "") {
-                fetch('https://localhost:44368/api/Managers', {
-                    method: 'POST',
-                    credentials: 'include',
-                    headers: {
-                        'Authorization': 'Bearer ' + localStorage.getItem("token"),
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify( //stringfy = konverterer alle elementer i json-objektet til stringe
-                        {
-                            firstName: this.firstName,
-                            lastName: this.lastName,
-                            email: this.email,
-                            password: this.password
-                            
-                        }),
-                }).then(res => {
-                    if (!res.ok) {
-                        if (res.status == 400)
-                            throw new Error(res.statusText);
-                        else
-                            throw new Error('Network response failed');
-                    } else {
-                        this.createstatus = "OK";
-                        //localStorage.setItem("manager", firstName, lastName, email, password);                   
-                    }
-                });
-            },
-               
-            async deleteManager() {
-                // mangler at specificere id på manageren som skal slettes!
-                fetch('https://localhost:44368/api/Managers/${id}'), {
-                    method: 'DELETE'
+                if (this.firstName != "" && this.lastName != "" && this.email != "" && this.password) {
+                    fetch('https://localhost:44368/api/Managers', {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify( //stringfy = konverterer alle elementer i json-objektet til stringe
+                            {
+                                firstName: this.firstName,
+                                lastName: this.lastName,
+                                email: this.email,
+                                password: this.password
+
+                            }),
+                    }).then(res => {
+                        if (!res.ok) {
+                            if (res.status == 400)
+                                throw new Error(res.statusText);
+                            else
+                                throw new Error('Network response failed');
+                        } else {
+                            this.createstatus = "OK";
+                            //localStorage.setItem("manager", firstName, lastName, email, password);                   
+                        }
+                    });
+                } else {
+                     alert('All inputFields required!');
                 }
+                    
             },
+            
         }
     }
 </script>

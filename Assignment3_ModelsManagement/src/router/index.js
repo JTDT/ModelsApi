@@ -1,8 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import Home from "../components/Home.vue";
-//import Login from "../components/Login.vue";
 import Jobs from "../components/Jobs.vue";
+import AddJob from "../components/AddJob.vue";
 import Model from "../components/Model.vue";
 import Manager from "../components/Manager.vue";
 
@@ -18,15 +18,15 @@ export default new VueRouter({
         component: Home
     },
 
-    //{
-    //    path: "/login",
-    //    name: "Login",
-    //    component: Login
-    //},
     {
         path: "/jobs",
         name: "Jobs",
         component: Jobs
+        },
+        {
+        path: "/addjob",
+        name: "AddJob",
+        component: AddJob
     },
     {
         path: "/model",

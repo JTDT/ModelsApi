@@ -15,11 +15,11 @@
         data() {
             return {
                 links: [
-                    {
-                        id: 0,
-                        text: 'Home',
-                        page: '/Home'
-                    },
+                    //{
+                    //    id: 0,
+                    //    text: 'Home',
+                    //    page: '/Home'
+                    //},
                     {
                         id: 1,
                         text: 'Jobs',
@@ -27,11 +27,16 @@
                     },
                     {
                         id: 2,
+                        text: 'AddJob',
+                        page: '/AddJob'
+                    },
+                    {
+                        id: 3,
                         text: 'Model',
                         page: '/Model'
                     },
                     {
-                        id: 3,
+                        id: 4,
                         text: 'Manager',
                         page: '/Manager'
                     }

@@ -3,13 +3,14 @@
         <h2>Job list</h2>
         <div>
             <table>
-                <tr>
+                <tr v-on:click="showSelectedJob()">
                     <th>Customer</th>
                     <th>Start date</th>
                     <th>Days</th>
                     <th>Location</th>
                     <th>Comments</th>
                     <th>Models</th>
+                    <th>Expenses</th>
 
                 </tr>
             </table>
@@ -22,12 +23,27 @@
                         <td>{{job.days}}</td>
                         <td>{{job.location}}</td>
                         <td>{{job.comments}}</td>
+                        <!--<td>{{getModels(job)}}</td>-->
+                        <td>{{getExpenses(job)}}</td>
                     </tr>
                 </table>
             </div>
 
-            <button type="button" @click="addExpenses()">Add expense</button>
+
         </div>
+
+        <div>
+            <button type="button" @click="addExpenses()">Add expense</button>
+            <input type="text" id="expense" name="expense" v-model="expense" />
+
+        </div>
+
+        <div>
+            <button type="button" @click="addModelToJob()">Add Model</button>
+            // drop down med modeller
+
+        </div>
+
     </div>
     <!--<label for="model">Select : </label>
     <input type="text" name="model" id="modelList" v-model="modelList" />
@@ -39,11 +55,17 @@
 </template>
 
 <script>
-    //let jobList;
-
+    
     export default {
         name: "job",
-      //  data() { return { jobList: [], isManager = false}},
+        data() {
+            return {
+                jobList: [],
+                expense: 0,
+                expenses: []
+                /*, isManager = false*/
+            }
+        },
 
         //// Check user
         //let jwt = localStorage.getItem("token");
@@ -60,6 +82,7 @@
         created() {
             alert('Created hook has been called');
             this.getJobs();
+            this.getAPIExpenses();
         },
 
         methods: {
@@ -72,16 +95,37 @@
                         'Content-Type': 'application/json'
                     }
                 })
-                //    .then(response => {
-                //    this.jobList =  response.json();
-                //    console.log("getJobs" + this.jobList);
-                //})
 
                 if (response.ok) {
                     this.jobList = await response.json();
-                    console.log("getJobs response ok" + this.jobList);
-                    //this.jobList = JSON.parse(localStorage.getJobs)
+                    //console.log("getJobs response ok" + this.jobList);                    
                 }
+            }
+            ,
+            async getAPIExpenses() {
+                let response = await fetch('https://localhost:44368/api/Expenses', {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                        'Content-Type': 'application/json'
+                    }
+                })
+                if (response.ok) {                    
+                    this.expenses = await response.json();
+                }
+            },
+
+            getExpenses(job) {
+                this.expense = 0;
+                this.expenses.forEach(exp => {
+                        // find the amount for each job
+                        if (exp["jobId"] == job["efJobId"]) {
+                            this.expense += exp["amount"];
+                            //console.log("get expenses" + expenses);
+                        }
+                    })                
+                return this.expense;
             }
         }
     
@@ -150,4 +194,22 @@
 
 
 <style>
+    table, th, td{
+        border: 1px solid black;
+        border-collapse: collapse;
+        align-content: center;
+        
+
+    }
+    table caption{
+        font-weight: bold;
+        font-size: larger;
+    }
+    th, td{
+        padding: 5px;
+        
+    }
+    th{
+        text-align: left;
+    }
 </style>

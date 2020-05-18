@@ -26,6 +26,7 @@
 
         <div>
             <label for="selectedJob">Selected job: </label>
+            <label>{{selectedJob.customer}} {{selectedJob.location}}</label>
         </div>
 
         <div>

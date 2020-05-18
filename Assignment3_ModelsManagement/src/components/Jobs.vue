@@ -34,19 +34,7 @@
             <input type="number" id="amount" name="amount" v-model.number="amount" />
         </div>
 
-        <!--<div>
-            <button type="button" @click="addModelToJob()">Add Model</button>
-            // drop down med modeller
-
-        </div>-->
-
     </div>
-    <!--<label for="model">Select : </label>
-    <input type="text" name="model" id="modelList" v-model="modelList" />
-    <datalist id="modelList" v-for="model in modelList">
-        <option>{{model.firstName}}</option>
-        <option value="test"></option>
-    </datalist>-->
 
 </template>
 
@@ -113,13 +101,13 @@
             }
             ,
             showSelectedJob(job) {
-                let table = "";
+                //let table = "";
                 this.selectedJob = job;
 
-                table = document.getElementById('jobList');
+                //table = document.getElementById('jobList');
                 //let rowId =
 
-                var cells = table.getElementsById('rowCust');
+                //var cells = table.getElementsById('rowCust');
 
                 //cells.style.backgroundColor = "yellow";
                 // curent tag ???
@@ -152,6 +140,7 @@
                             throw new Error('Network response failed');
                     } else {
                         this.createstatus = "OK";
+                        alert('Expense was added! Please refresh the page to update the table.')
                     }
                 });
             }

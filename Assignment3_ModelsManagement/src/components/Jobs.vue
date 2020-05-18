@@ -3,7 +3,7 @@
         <h2>Job list</h2>
         <div>
             <table>
-                <tr v-on:click="showSelectedJob()">
+                <tr >
                     <th>Customer</th>
                     <th>Start date</th>
                     <th>Days</th>
@@ -11,38 +11,33 @@
                     <th>Comments</th>
                     <th>Models</th>
                     <th>Expenses</th>
-
+                </tr>               
+                <tr v-for="job in jobList" v-on:click="showSelectedJob(job.efJobId)">
+                    <td>{{job.customer}}</td>
+                    <td>{{job.startDate}}</td>
+                    <td>{{job.days}}</td>
+                    <td>{{job.location}}</td>
+                    <td>{{job.comments}}</td>
+                    <td>{{models[job.efJobId]}}</td>
+                    <td>{{getExpenses(job)}}</td>
                 </tr>
-            </table>
-
-            <div v-for="job in jobList">
-                <table>
-                    <tr>
-                        <td>{{job.customer}}</td>
-                        <td>{{job.startDate}}</td>
-                        <td>{{job.days}}</td>
-                        <td>{{job.location}}</td>
-                        <td>{{job.comments}}</td>
-                        <!--<td>{{getModels(job)}}</td>-->
-                        <td>{{getExpenses(job)}}</td>
-                    </tr>
-                </table>
-            </div>
-
-
+            </table>            
         </div>
 
         <div>
+            <label for="selectedJob">Selected job: </label>
+        </div>
+
+        <!--<div>
             <button type="button" @click="addExpenses()">Add expense</button>
-            <input type="text" id="expense" name="expense" v-model="expense" />
+            <input type="number" id="expense" name="expense" v-model.number="amount" />
+        </div>-->
 
-        </div>
-
-        <div>
+        <!--<div>
             <button type="button" @click="addModelToJob()">Add Model</button>
             // drop down med modeller
 
-        </div>
+        </div>-->
 
     </div>
 
@@ -55,8 +50,12 @@
         data() {
             return {
                 jobList: [],
-                expense: 0,
-                expenses: []
+                //expense: 0,
+                expenses: [],
+                //jobmodelsAPI: [],
+                models: [],
+                selectedJobId: 0
+
                 /*, isManager = false*/
             }
         },
@@ -73,10 +72,12 @@
         //    this.isManager = true;
         //}
 
-        created() {
-            alert('Created hook has been called');
-            this.getJobs();
-            this.getAPIExpenses();
+        async created() {
+            //alert('Created hook has been called');
+            await this.getJobs();
+            this.getAPIModels();
+            await this.getAPIExpenses();
+                         
         },
 
         methods: {
@@ -96,6 +97,48 @@
                 }
             }
             ,
+            showSelectedJob(jobId) {
+                let table = "";
+                this.selectedJobId = jobId;
+
+                //table = document.getElementById('table');
+                //let rowId = 
+
+                //var cells = table.getElementsByTagName('td');
+
+                //cells.style.backgroundColor = "yellow";
+                // curent tag ???
+                // class 
+            }
+            ,
+            async addExpenses(expense) {
+                // Tilføjer expense for a model          
+                fetch('https://localhost:44368/api/Expenses', {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify( //stringfy = konverterer alle elementer i json-objektet tils stringe
+                        {
+                            amount: this.firstName,
+                           
+                        })
+                }).then(res => {
+                    if (!res.ok) {
+                        if (res.status == 400)
+                            throw new Error(res.statusText);
+                        else
+                            throw new Error('Network response failed');
+                    } else {
+                        this.createstatus = "OK";
+                    }
+                });
+            }
+
+            }
+            ,
             async getAPIExpenses() {
                 let response = await fetch('https://localhost:44368/api/Expenses', {
                     method: 'GET',
@@ -111,88 +154,86 @@
             },
 
             getExpenses(job) {
-                this.expense = 0;
+                let expense = 0;
                 this.expenses.forEach(exp => {
                         // find the amount for each job
                         if (exp["jobId"] == job["efJobId"]) {
-                            this.expense += exp["amount"];
+                            expense += exp["amount"];
                             //console.log("get expenses" + expenses);
                         }
                     })                
-                return this.expense;
+                return expense;
             }
+            ,
+            getAPIModels() {
+                this.jobList.forEach(job => {
+                    this.getModelsAPI(job);
+                    //this.jobList.models = models;
+                });
+                this.$forceUpdate();
+
+                //let response = await fetch('https://localhost:44368/api/Models', {
+                //    method: 'GET',
+                //    credentials: 'include',
+                //    headers: {
+                //        'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                //        'Content-Type': 'application/json'
+                //    }
+                //})
+                //if (response.ok) {
+                //    this.jobmodelsAPI = await response.json();
+                //    console.log("models API: ")
+                //}
+            }
+            ,
+            getModelsAPI(job) {
+                let self = this;
+                let jobId = job.efJobId;
+                fetch('https://localhost:44368/api/Jobs/' + job.efJobId, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Authorization': 'Bearer ' + localStorage.getItem("token"),
+                        'Content-Type': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            response.json().then(job => {
+                                let models = "";
+                                //this.jobmodelAPI = null;
+                                job.models.forEach(model => {
+                                    // find the models that match with the job
+                                    models += model["firstName"] + " " + model["lastName"] + ", ";
+
+                                    //if (model["location"] == job["location"] && model["customer"] == job["customer"]) {
+                                    //    job["models"].forEach(m => this.models += m["firstName"] + " " );                            
+                                    //        console.log(models);
+                                    //    }
+                                })
+                                //return models;
+                                self.models[jobId] = models; //this.getModelsAPI(job);
+                            });
+                        }
+                    });
+            }
+            //,
+            //getModels(job) {
+            //    //let model = 0;
+
+            //    return this.models[job.efJobId];
+            //}
         }
     
     };
 
 </script>
 
-
-    //methods: {
-    //    async addNewExpense() {
-    //        if(this.input.amaount != "" && this.input.date != "")
-    //        fetch('https://localhost:44368/api/Expenses', {
-    //            method: 'POST',
-    //            credentials: 'include',
-    //            headers: {
-    //                'Authorization': 'Bearer ' + localStorage.getItem("token"),
-    //                'Content-Type': 'application/json'
-    //            },
-    //            body: JSON.stringify( //stringfy = konverterer alle elementer i json-objektet til stringe
-    //                {
-    //                    modelId: this.input.modelId,
-    //                    jobId: this.input.jobId,
-    //                    date: this.input.date,
-    //                    text: this.input.text,
-    //                    amaount: this.input.amaount
-
-    //                }),
-    //        }).then(response => {
-    //            //var items = response;
-    //        }).catch(error => alert({
-    //            isLoading: false,
-    //            message: 'Something bad happened ' + error
-    //        }));
-    //    }
-    //},
-
-
-    // methods: {
-    //    async createJob() {
-    //        if(this.input.customer != "" && this.input.startDate != "" && this.input.days != "" && this.input.location != "")
-    //        fetch('https://localhost:44368/api/Jobs', {
-    //            method: 'POST',
-    //            credentials: 'include',
-    //            headers: {
-    //                'Authorization': 'Bearer ' + localStorage.getItem("token"),
-    //                'Content-Type': 'application/json'
-    //            },
-    //            body: JSON.stringify( //stringfy = konverterer alle elementer i json-objektet til stringe
-    //                {
-    //                    customer: this.input.customer,
-    //                    startDate: this.input.startDate,
-    //                    days: this.input.days,
-    //                    location: this.input.location,
-    //                    comments: this.input.comments
-    //                }),
-    //        }).then(response => {
-    //            //var items = response;
-    //        }).catch(error => alert({
-    //            isLoading: false,
-    //            message: 'Something bad happened ' + error
-    //        }));
-    //    }
-    //}
-
-
-
-
 <style>
     table, th, td{
         border: 1px solid black;
         border-collapse: collapse;
-        align-content: center;
-        
+        align-content: center;       
 
     }
     table caption{
@@ -205,5 +246,8 @@
     }
     th{
         text-align: left;
+    }
+    selected{
+        background-color: dodgerblue;
     }
 </style>

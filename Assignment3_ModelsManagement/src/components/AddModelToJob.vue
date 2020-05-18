@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <h1>Jobs</h1>
+    <div v-if="isManager">
+        <h1>Add and remove models from jobs</h1>
         <form class="ModelJobForm">
             <h3>Add model to job: </h3>
             <label for="model">Select model:</label>
@@ -24,13 +24,16 @@
                 <option v-for="model in modelList">{{model.efModelId}} {{model.firstName}} </option>
             </select>
 
-            <!--<label for="model">Select Job:</label>
-    <select @change="onChangeJob($event)">
-        <option v-for="model in modelList">{{model.jobModels.efJobId}} {{model.jobModels.location}} </option>
-    </select>-->
-
+            <label for="model">Select Job:</label>
+            <select @change="onChangeJob($event)">
+                <option v-for="job in jobList">{{job.efJobId}} {{job.location}} </option>
+            </select>
             <input type="submit" value="Delete model from job" id="button" @click="deleteModelFromJob()">
         </form>
+    </div>
+
+    <div v-else>
+        <p>Access denied. Only managers has access to this page!</p>
     </div>
 </template>
 
@@ -38,15 +41,28 @@
     export default {
         data() {
             return {
+                isMananger: false,
+
                 modelList: [],
                 jobList: [],
                 modelId: 0,
                 jobId: 0
             };
         },
+
         created() {
-            this.getModels();
-            this.getJobs();
+           let jwt = localStorage.getItem("token");
+            let jwtData = jwt.split('.')[1]
+            let decodedJwtJSONData = window.atob(jwtData)
+            let decodedJwtData = JSON.parse(decodedJwtJSONData)
+
+            let role = decodedJwtData["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"];
+
+            if (role == "Manager") {
+                this.isManager = true            
+                this.getModels();
+                this.getJobs();
+            }
         },
 
         methods: {
@@ -82,18 +98,18 @@
             onChangeModel(event) {
                 let selectedID = event.target.value;
                 this.modelId = parseInt(selectedID) //får fat i den valgte models ID
-               // alert(modelId);
+                // alert(modelId);
             },
-            
+
             onChangeJob(event) {
                 let selectedJobId = event.target.value;
                 this.jobId = parseInt(selectedJobId) //får fat i den valgte models ID
-               // alert(jobId)
-             
+                // alert(jobId)
+
             },
 
             async addModelToJob() {
-                fetch('https://localhost:44368/api/Jobs/'+ this.jobId + '/model/' + this.modelId,
+                fetch('https://localhost:44368/api/Jobs/' + this.jobId + '/model/' + this.modelId,
                     {
                         method: 'POST',
                         credentials: 'include',
@@ -113,14 +129,14 @@
                     });
             },
             async deleteModelFromJob() {
-                fetch('https://localhost:44368/api/Jobs/'+ this.jobId + '/model/' + this.modelId, {
+                fetch('https://localhost:44368/api/Jobs/' + this.jobId + '/model/' + this.modelId, {
                     method: 'DELETE',
                     credentials: 'include',
                     headers: {
                         'Authorization': 'Bearer ' + localStorage.getItem("token"),
                         'Content-Type': 'application/json'
                     },
-                  
+
                 }).then(res => {
                     if (!res.ok) {
                         if (res.status == 400)
@@ -137,7 +153,7 @@
 </script>
 <style>
 
-     label {
+    label {
         float: left;
         width: 100px;
         display: block;
@@ -146,15 +162,16 @@
         padding-right: 10px;
         margin-top: 10px;
     }
-     modelJobForm{
-         float: left;
+
+    modelJobForm {
+        float: left;
         width: 100px;
         display: block;
         clear: left;
         text-align: right;
         padding-right: 10px;
         margin-top: 10px;
-     }
+    }
 
     input, textarea {
         margin-top: 10px;

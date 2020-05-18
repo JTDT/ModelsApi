@@ -78,6 +78,15 @@
     }
 </script>
 <style>
+    #wrapper {
+        margin-left: auto;
+        margin-right: auto;
+        width: 90%;
+        background-color: aliceblue;
+        min-width: 700px;
+        box-shadow: 5px 5px 5px #828282;
+        align-content: center;
+    }
     form {
         background-color: aliceblue;
         width: 500px;
@@ -100,6 +109,7 @@
         margin-top: 10px;
         display: block;
     }
+
 
     #button {
         text-align: center;

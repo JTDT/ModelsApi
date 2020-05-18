@@ -102,14 +102,13 @@
             onChangeModel(event) {
                 let selectedID = event.target.value;
                 this.modelId = parseInt(selectedID) //får fat i den valgte models ID
-                //alert(modelId);
+                
             },
 
             onChangeJob(event) {
                 let selectedJobId = event.target.value;
                 this.jobId = parseInt(selectedJobId) //får fat i den valgte models ID
-                //alert(jobId)
-
+                
             },
 
             async addModelToJob() {

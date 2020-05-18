@@ -9,8 +9,8 @@
                     <th>Days</th>
                     <th>Location</th>
                     <th>Comments</th>
-                    <th v-if="isManager">Models</th>
                     <th>Expenses</th>
+                    <th v-if="isManager">Models</th>
                 </tr>
                 <tr v-for="job in jobList" v-on:click="showSelectedJob(job)">
                     <td>{{job.customer}}</td>
@@ -18,19 +18,21 @@
                     <td>{{job.days}}</td>
                     <td>{{job.location}}</td>
                     <td>{{job.comments}}</td>
-                    <td v-if="isManager">{{models[job.efJobId]}}</td>
                     <td>{{getExpenses(job)}}</td>
+                    <td v-if="isManager">{{models[job.efJobId]}}</td>
                 </tr>
             </table>
         </div>
 
-        <div v-if="isModel">
+        <form id="addExpense" v-if="isModel">
+           
             <label for="selectedJob">Selected job: </label>
-            <label>{{selectedJob.customer}} {{selectedJob.location}}</label>     
-        
-            <button type="button" @click="addExpenses()">Add expense</button>
+            <label>{{selectedJob.customer}} {{selectedJob.location}}</label>
+                      
             <input type="number" id="amount" name="amount" v-model.number="amount" />
-        </div>
+            <button type="button" id="button" @click="addExpenses()">Add expense</button>
+
+        </form>
 
     </div>
 
@@ -42,10 +44,8 @@
         name: "job",
         data() {
             return {
-                jobList: [],
-                //expense: 0,
-                expenses: [],
-                //jobmodelsAPI: [],
+                jobList: [],                
+                expenses: [],                
                 models: [],
                 selectedJob: {}, // object
                 amount: 0,
@@ -58,7 +58,6 @@
 
         async created() {
 
-
             // Check user
             let jwt = localStorage.getItem("token");
             let jwtData = jwt.split('.')[1]
@@ -69,11 +68,11 @@
             this.modelId = decodedJwtData["modelId"];
 
             if (role == "Manager") {
-                this.isManager = true;
-                //alert('Created hook has been called');
+                this.isManager = true;                
             }
-            else
+            else {
                 this.isModel = true;
+            }                
 
             await this.getJobs();
             this.getAPIModels();
@@ -92,23 +91,12 @@
                 })
 
                 if (response.ok) {
-                    this.jobList = await response.json();
-                    //console.log("getJobs response ok" + this.jobList);
+                    this.jobList = await response.json();                    
                 }
             }
             ,
-            showSelectedJob(job) {
-                //let table = "";
-                this.selectedJob = job;
-
-                //table = document.getElementById('jobList');
-                //let rowId =
-
-                //var cells = table.getElementsById('rowCust');
-
-                //cells.style.backgroundColor = "yellow";
-                // curent tag ???
-                // class
+            showSelectedJob(job) {               
+                this.selectedJob = job;               
             }
             ,
             async addExpenses() {
@@ -162,8 +150,7 @@
                 this.expenses.forEach(exp => {
                     // find the amount for each job
                     if (exp["jobId"] == job["efJobId"]) {
-                        expense += exp["amount"];
-                        //console.log("get expenses" + expenses);
+                        expense += exp["amount"];                        
                     }
                 })
                 return expense;
@@ -171,23 +158,9 @@
             ,
             getAPIModels() {
                 this.jobList.forEach(job => {
-                    this.getModelsAPI(job);
-                    //this.jobList.models = models;
+                    this.getModelsAPI(job);                    
                 });
-                this.$forceUpdate();
-
-                //let response = await fetch('https://localhost:44368/api/Models', {
-                //    method: 'GET',
-                //    credentials: 'include',
-                //    headers: {
-                //        'Authorization': 'Bearer ' + localStorage.getItem("token"),
-                //        'Content-Type': 'application/json'
-                //    }
-                //})
-                //if (response.ok) {
-                //    this.jobmodelsAPI = await response.json();
-                //    console.log("models API: ")
-                //}
+                this.$forceUpdate();                
             }
             ,
             getModelsAPI(job) {
@@ -205,28 +178,18 @@
                         if (response.ok) {
                             response.json().then(job => {
                                 let models = "";
-                                //this.jobmodelAPI = null;
+                                
                                 job.models.forEach(model => {
                                     // find the models that match with the job
-                                    models += model["firstName"] + " " + model["lastName"] + ", ";
-
-                                    //if (model["location"] == job["location"] && model["customer"] == job["customer"]) {
-                                    //    job["models"].forEach(m => this.models += m["firstName"] + " " );
-                                    //        console.log(models);
-                                    //    }
+                                    models += model["firstName"] + " " + model["lastName"] + ", ";                                    
                                 })
-                                //return models;
-                                self.models[jobId] = models; //this.getModelsAPI(job);
+                               
+                                self.models[jobId] = models; 
                             });
                         }
                     });
             }
-            //,
-            //getModels(job) {
-            //    //let model = 0;
-
-            //    return this.models[job.efJobId];
-            //}
+            
         }
 
     };
@@ -255,5 +218,18 @@
 
     selected {
         background-color: dodgerblue;
+    }
+    addExpense{
+        background-color: aliceblue;
+        width: 100px;
+        font-family: Arial, sans-serif;
+        padding: 10px;
+        align-content: center;
+    }
+     #button {
+        
+        background-color: cornflowerblue;
+        font-size: 10px;
+        
     }
 </style>
